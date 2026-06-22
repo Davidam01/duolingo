@@ -32,9 +32,9 @@ export default async function LeaderboardPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
       <div className="text-center space-y-1">
-        <h1 className="text-3xl font-bold text-text">Clasificación semanal</h1>
+        <h1 className="text-3xl font-bold text-text">Clasificación global</h1>
         <p className="text-text-muted">
-          Esta semana compiten {totalParticipants} estudiantes
+          {totalParticipants} estudiantes compitiendo
         </p>
       </div>
 

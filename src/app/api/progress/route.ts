@@ -55,17 +55,6 @@ export async function POST(request: Request) {
       },
     })
 
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    await prisma.user.update({
-      where: { id: session.user.id },
-      data: {
-        xp: { increment: correct ? 10 : 2 },
-        lastActivity: new Date(),
-      },
-    })
-
     return NextResponse.json(progress, { status: 201 })
   } catch {
     return NextResponse.json({ error: "Error al guardar progreso" }, { status: 500 })
