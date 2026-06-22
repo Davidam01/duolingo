@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { verifyAchievements } from "@/lib/achievements"
 
 export async function POST(request: Request) {
   const session = await auth()
@@ -51,14 +52,9 @@ export async function POST(request: Request) {
     })
 
     // Verify achievements after completing lesson
-    try {
-      await fetch(new URL("/api/achievements", request.url), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      })
-    } catch {
+    verifyAchievements(userId).catch(() => {
       // Silently fail - achievements are non-critical
-    }
+    })
 
     return NextResponse.json({ xp: xpEarned })
   } catch {

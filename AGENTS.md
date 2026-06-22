@@ -20,7 +20,7 @@ src/
 ├── app/
 │   ├── (auth)/                 # Grupo de páginas de autenticación (login, registro)
 │   ├── learn/                  # Experiencia principal de lecciones (ruta vertical con nodos)
-│   ├── leaderboard/            # Clasificaciones semanales
+│   ├── leaderboard/            # Clasificaciones globales
 │   ├── profile/                # Estadísticas y logros del usuario (galería de badges)
 │   ├── onboarding/language/    # Selección de idioma al primer inicio
 │   ├── api/
@@ -120,6 +120,11 @@ prisma/
 - **Proxy publicPaths**: incluir siempre `/api/ruta` además de `/ruta` para APIs que necesiten bypass
 - **JWT callback**: siempre con try/catch, NO hardcodear valores por defecto en catch (mantener el anterior)
 - **better-sqlite3**: requiere `npm approve-scripts better-sqlite3` tras instalar (native addon)
+- **Sistema de XP**: Solo `POST /api/lessons/complete` otorga XP. `POST /api/progress` solo guarda progreso individual (sin XP) para evitar doble acumulación.
+- **Rachas (streak)**: Se actualizan en `POST /api/lessons/complete`. Si la última actividad fue el día anterior → streak +1. Si fue hoy → se mantiene. Si hubo un gap >1 día → se reinicia a 1.
+- **Lecciones completadas**: `user.lessonsCompleted` se incrementa en cada llamada exitosa a `/api/lessons/complete`. `user.perfectLessons` se incrementa solo si `correct === total`.
+- **Verificación de logros**: Se llama a `POST /api/achievements` desde `POST /api/lessons/complete` mediante fetch interno (try/catch, no crítico). Los logros usan `user.lessonsCompleted` (no cuentan ejercicios).
+- **Leaderboard**: Es global (XP total), no semanal. El modelo `Leaderboard` con `weekStart`/`weekEnd` existe pero no se usa actualmente.
 
 ## Flujo de Onboarding
 
@@ -130,7 +135,7 @@ prisma/
 
 ## Sistema de Logros
 
-18 logros en 4 categorías verificados automáticamente al completar lección (`POST /api/achievements`):
+18 logros en 4 categorías verificados automáticamente al completar lección. La verificación se dispara desde `POST /api/lessons/complete` mediante un fetch interno a `POST /api/achievements` (envuelto en try/catch, no bloqueante):
 
 | Tipo | Ejemplos |
 |------|----------|
