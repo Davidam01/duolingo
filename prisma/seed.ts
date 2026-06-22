@@ -193,6 +193,69 @@ async function main() {
     0,
   )
   console.log(`${totalExercises} ejercicios`)
+
+  const achievements = await prisma.achievement.createMany({
+    data: [
+      {
+        type: "STREAK",
+        title: "Racha de 3 días",
+        description: "Practica 3 días seguidos",
+        icon: "🔥",
+        threshold: 3,
+      },
+      {
+        type: "STREAK",
+        title: "Racha de 7 días",
+        description: "Practica 7 días seguidos",
+        icon: "🔥",
+        threshold: 7,
+      },
+      {
+        type: "XP_MILESTONE",
+        title: "Principiante",
+        description: "Alcanza 100 XP",
+        icon: "⭐",
+        threshold: 100,
+      },
+      {
+        type: "XP_MILESTONE",
+        title: "Aprendiz",
+        description: "Alcanza 500 XP",
+        icon: "🌟",
+        threshold: 500,
+      },
+      {
+        type: "XP_MILESTONE",
+        title: "Experto",
+        description: "Alcanza 1000 XP",
+        icon: "🏆",
+        threshold: 1000,
+      },
+      {
+        type: "LESSONS_COMPLETED",
+        title: "Primera lección",
+        description: "Completa tu primera lección",
+        icon: "📚",
+        threshold: 1,
+      },
+      {
+        type: "LESSONS_COMPLETED",
+        title: "Cinco lecciones",
+        description: "Completa 5 lecciones",
+        icon: "📚",
+        threshold: 5,
+      },
+      {
+        type: "LESSONS_COMPLETED",
+        title: "Dedicación",
+        description: "Completa 10 lecciones",
+        icon: "🎯",
+        threshold: 10,
+      },
+    ],
+  })
+
+  console.log(`${achievements.count} logros creados`)
 }
 
 main()
