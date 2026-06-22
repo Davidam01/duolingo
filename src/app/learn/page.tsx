@@ -37,7 +37,7 @@ export default async function LearnPage() {
   const completedSet = new Set(completedExercises.map((p) => p.exerciseId))
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
+    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-white to-background">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
         {courses.map((course) => (
           <div key={course.id}>
@@ -65,9 +65,9 @@ export default async function LearnPage() {
                     </span>
                   </div>
 
-                  <div className="w-full h-1.5 bg-border rounded-full overflow-hidden mb-6">
+                  <div className="w-full h-2 bg-border/50 rounded-full overflow-hidden mb-6">
                     <div
-                      className="h-full bg-primary rounded-full transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-500 ease-out"
                       style={{ width: `${(doneEx / totalEx) * 100}%` }}
                     />
                   </div>
@@ -90,10 +90,10 @@ export default async function LearnPage() {
                         let label = (idx + 1).toString()
 
                         if (allDone) {
-                          nodeStyle = "bg-accent border-accent text-white"
+                          nodeStyle = "bg-accent border-accent text-white shadow-[0_0_12px_rgba(255,150,0,0.3)]"
                           label = "✓"
                         } else if (isActive || isFirstIncomplete) {
-                          nodeStyle = "bg-primary border-primary text-white"
+                          nodeStyle = "bg-primary border-primary text-white shadow-[0_0_12px_rgba(88,204,2,0.3)]"
                           ringStyle = "animate-ping absolute inset-0 rounded-full bg-primary/30"
                           extraGlow = "animate-glow-pulse"
                         }
@@ -117,8 +117,8 @@ export default async function LearnPage() {
                               allDone
                                 ? "border-accent/30 bg-accent/[0.03]"
                                 : isActive || isFirstIncomplete
-                                  ? "border-primary/40 bg-primary/[0.03] shadow-sm group-hover:shadow-md group-hover:border-primary/60"
-                                  : "border-border bg-surface opacity-60 group-hover:opacity-80"
+                                  ? "border-primary/30 bg-surface shadow-sm hover:shadow-md hover:border-primary/50"
+                                  : "border-border bg-surface opacity-50"
                             }`}>
                               <p className={`font-bold transition-colors ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
                                 {lesson.title}

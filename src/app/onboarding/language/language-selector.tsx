@@ -49,8 +49,8 @@ export function LanguageSelector({ courses }: { courses: CourseItem[] }) {
               onClick={() => setSelected(course.language)}
               className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all active:scale-[0.98] ${
                 isSelected
-                  ? "border-primary bg-primary/5 text-primary shadow-md"
-                  : "border-border bg-surface text-text hover:border-primary/50 hover:shadow-sm"
+                  ? "border-primary bg-primary/5 text-primary"
+                  : "border-border bg-white text-text hover:border-primary/50"
               }`}
             >
               <span className="text-3xl">{course.flag}</span>
@@ -81,7 +81,7 @@ export function LanguageSelector({ courses }: { courses: CourseItem[] }) {
       <button
         onClick={handleSubmit}
         disabled={!selected || saving}
-        className="w-full py-4 px-6 bg-primary text-white font-bold text-lg rounded-2xl shadow-[0_4px_0_#58A700] hover:shadow-[0_2px_0_#58A700] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0"
+        className="duo-btn duo-btn-primary w-full text-lg uppercase tracking-wide"
       >
         {saving ? "Guardando..." : "Empezar a aprender"}
       </button>

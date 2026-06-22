@@ -99,7 +99,7 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
         <button
           onClick={handleConfirm}
           disabled={!selected || answered}
-          className="w-full py-4 px-6 bg-primary hover:bg-primary-hover text-white font-bold text-lg rounded-2xl shadow-[0_4px_0_#58A700] hover:shadow-[0_2px_0_#58A700] hover:translate-y-[2px] active:translate-y-[4px] active:shadow-none transition-all duration-150 disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 disabled:active:translate-y-0 uppercase tracking-wide"
+          className="duo-btn duo-btn-primary w-full text-lg uppercase tracking-wide"
         >
           {answered ? "siguiente →" : "confirmar"}
         </button>
