@@ -8,7 +8,7 @@ const config: Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  setupFilesAfterSetup: ["<rootDir>/jest.setup.ts"],
+  setupFiles: ["<rootDir>/jest.setup.ts"],
 }
 
 export default config
