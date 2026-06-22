@@ -16,17 +16,27 @@ export function LanguageSelector({ courses }: { courses: CourseItem[] }) {
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
 
   async function handleSubmit() {
     if (!selected) return
     setSaving(true)
-    await fetch("/api/onboarding/language", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ language: selected }),
-    })
-    router.push("/learn")
-    router.refresh()
+    setError("")
+    try {
+      const res = await fetch("/api/onboarding/language", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language: selected }),
+      })
+      if (!res.ok) {
+        throw new Error("Error al guardar idioma")
+      }
+      router.push("/learn")
+      router.refresh()
+    } catch {
+      setError("Error al guardar. Intenta de nuevo.")
+      setSaving(false)
+    }
   }
 
   return (
@@ -61,6 +71,12 @@ export function LanguageSelector({ courses }: { courses: CourseItem[] }) {
 
       {courses.length === 0 && (
         <p className="text-text-muted py-8">No hay cursos disponibles</p>
+      )}
+
+      {error && (
+        <div className="p-3 rounded-xl bg-error/10 border border-error/20" role="alert">
+          <p className="text-sm text-error font-medium">{error}</p>
+        </div>
       )}
 
       <button

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
 
-const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next", "/onboarding"]
+const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next", "/onboarding", "/api/onboarding"]
 
 export async function proxy(request: Request) {
   const { pathname } = new URL(request.url)
