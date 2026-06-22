@@ -43,7 +43,7 @@ export default async function OnboardingLanguagePage() {
   }))
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-primary/5 to-background">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-white to-background">
       <div className="max-w-lg w-full text-center space-y-8">
         <div className="space-y-2">
           <div className="text-5xl animate-bounce-in">🦉</div>

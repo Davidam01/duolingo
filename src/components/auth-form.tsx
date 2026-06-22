@@ -83,7 +83,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             placeholder="Tu nombre"
             autoComplete="name"
             required
@@ -99,8 +99,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+          onChange={(e) => setEmail(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder="correo@ejemplo.com"
           autoComplete="email"
           required
@@ -115,8 +114,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+          onChange={(e) => setPassword(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder="••••••••"
           minLength={6}
           autoComplete={mode === "register" ? "new-password" : "current-password"}
@@ -133,7 +131,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3.5 px-6 bg-primary hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl text-lg transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+        className="duo-btn duo-btn-primary w-full text-base uppercase tracking-wide"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
@@ -164,7 +162,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           <button
             type="button"
             onClick={() => signIn("google", { callbackUrl: "/learn" })}
-            className="w-full py-3 px-6 border-2 border-border text-text font-bold rounded-2xl text-base transition-all hover:bg-surface-alt hover:border-text-muted active:scale-[0.98] flex items-center justify-center gap-3"
+            className="duo-btn duo-btn-secondary w-full gap-3"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
