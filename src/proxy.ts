@@ -1,16 +1,20 @@
 import { auth } from "@/lib/auth"
 
+const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next", "/onboarding"]
+
 export async function proxy(request: Request) {
   const { pathname } = new URL(request.url)
 
-  const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next"]
   const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + "/"))
-
   if (isPublic) return undefined
 
   const session = await auth()
   if (!session) {
     return Response.redirect(new URL("/login", request.url))
+  }
+
+  if (session.user?.onboardingComplete === false) {
+    return Response.redirect(new URL("/onboarding/language", request.url))
   }
 
   return undefined

@@ -36,86 +36,119 @@ export default async function LearnPage() {
   })
   const completedSet = new Set(completedExercises.map((p) => p.exerciseId))
 
+  const allLessonIds = courses.flatMap((c) =>
+    c.sections.flatMap((s) => s.lessons.map((l) => l.id)),
+  )
+
+  const completedLessons = await prisma.progress.groupBy({
+    by: ["exerciseId"],
+    where: {
+      userId: session.user.id,
+      completed: true,
+      exerciseId: { in: allLessonIds },
+    },
+  })
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-      {courses.map((course) => (
-        <div key={course.id}>
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-text">{course.title}</h1>
-            <p className="text-text-muted">{course.description}</p>
-          </div>
+    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
+      <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
+        {courses.map((course) => (
+          <div key={course.id}>
+            <div className="mb-6 text-center">
+              <h1 className="text-2xl font-bold font-display text-text">
+                {course.title.toLowerCase()}
+              </h1>
+              <p className="text-sm text-text-muted">{course.description}</p>
+            </div>
 
-          {course.sections.map((section) => {
-            const sectionExercises = section.lessons.reduce(
-              (acc, l) => acc + l.exercises.length, 0,
-            )
-            const completedSection = section.lessons.reduce(
-              (acc, l) =>
-                acc + l.exercises.filter((e) => completedSet.has(e.id)).length, 0,
-            )
+            {course.sections.map((section) => {
+              const totalEx = section.lessons.reduce((a, l) => a + l.exercises.length, 0)
+              const doneEx = section.lessons.reduce(
+                (a, l) => a + l.exercises.filter((e) => completedSet.has(e.id)).length, 0,
+              )
 
-            return (
-              <div key={section.id} className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-text">Sección {section.order}</h2>
-                  <span className="text-sm text-text-muted">
-                    {completedSection}/{sectionExercises}
-                  </span>
-                </div>
-                <div className="w-full h-1.5 bg-border rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${(completedSection / sectionExercises) * 100}%` }}
-                  />
-                </div>
+              return (
+                <div key={section.id} className="space-y-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-bold text-text-muted uppercase tracking-wider">
+                      {section.title}
+                    </h2>
+                    <span className="text-xs text-text-muted">
+                      {doneEx}/{totalEx}
+                    </span>
+                  </div>
 
-                <div className="space-y-2 pt-2">
-                  {section.lessons.map((lesson) => {
-                    const done = lesson.exercises.every((e) => completedSet.has(e.id))
-                    const started = lesson.exercises.some((e) => completedSet.has(e.id))
+                  <div className="w-full h-1.5 bg-border rounded-full overflow-hidden mb-6">
+                    <div
+                      className="h-full bg-primary rounded-full transition-all duration-500"
+                      style={{ width: `${(doneEx / totalEx) * 100}%` }}
+                    />
+                  </div>
 
-                    return (
-                      <Link
-                        key={lesson.id}
-                        href={`/lessons/${lesson.id}`}
-                      >
-                        <div
-                          className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all hover:border-primary ${
-                            done
-                              ? "border-success bg-success/5"
-                              : started
-                                ? "border-secondary bg-secondary/5"
-                                : "border-border bg-surface"
-                          }`}
-                        >
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold ${
-                              done
-                                ? "bg-success text-white"
-                                : started
-                                  ? "bg-secondary text-white"
-                                  : "bg-surface-alt text-text-muted"
-                            }`}
+                  <div className="relative">
+                    <div className="absolute left-[23px] top-3 bottom-3 w-0.5 bg-border" />
+
+                    <div className="space-y-6">
+                      {section.lessons.map((lesson, idx) => {
+                        const allDone = lesson.exercises.every((e) => completedSet.has(e.id))
+                        const started = lesson.exercises.some((e) => completedSet.has(e.id))
+                        const isFirstIncomplete = !allDone && !started && (idx === 0 || section.lessons.slice(0, idx).every((l) =>
+                          l.exercises.every((e) => completedSet.has(e.id)),
+                        ))
+                        const isActive = started && !allDone
+
+                        let nodeStyle = "bg-border border-border"
+                        let ringStyle = ""
+                        let label = (idx + 1).toString()
+
+                        if (allDone) {
+                          nodeStyle = "bg-accent border-accent text-white"
+                          label = "✓"
+                        } else if (isActive || isFirstIncomplete) {
+                          nodeStyle = "bg-primary border-primary text-white shadow-[0_0_0_4px_rgba(88,204,2,0.2)]"
+                          ringStyle = "animate-ping absolute inset-0 rounded-full bg-primary/30"
+                        }
+
+                        return (
+                          <Link
+                            key={lesson.id}
+                            href={`/lessons/${lesson.id}`}
+                            className="flex items-center gap-4 group"
                           >
-                            {done ? "✓" : lesson.order}
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-semibold text-text">{lesson.title}</p>
-                            <p className="text-sm text-text-muted">
-                              {lesson.exercises.length} ejercicios
-                            </p>
-                          </div>
-                          <span className="text-text-muted">→</span>
-                        </div>
-                      </Link>
-                    )
-                  })}
+                            <div className="relative shrink-0">
+                              <div
+                                className={`relative w-[46px] h-[46px] rounded-full border-[3px] flex items-center justify-center text-sm font-bold transition-all ${nodeStyle} group-hover:scale-110`}
+                              >
+                                {label}
+                                {ringStyle && <div className={ringStyle} />}
+                              </div>
+                            </div>
+
+                            <div className={`flex-1 p-4 rounded-2xl border-2 transition-all ${
+                              allDone
+                                ? "border-accent/30 bg-accent/[0.03]"
+                                : isActive || isFirstIncomplete
+                                  ? "border-primary/40 bg-primary/[0.03] shadow-sm"
+                                  : "border-border bg-surface opacity-60"
+                            }`}>
+                              <p className={`font-bold ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
+                                {lesson.title}
+                              </p>
+                              <p className="text-xs text-text-muted">
+                                {lesson.exercises.length} ejercicios
+                              </p>
+                            </div>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
-      ))}
+              )
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

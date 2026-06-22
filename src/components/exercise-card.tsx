@@ -29,10 +29,12 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
   return (
     <div className="space-y-6 animate-fade-in-up">
       {isTranslation && (
-        <p className="text-sm text-text-muted text-center">Traduce la siguiente frase</p>
+        <p className="text-sm text-text-muted text-center uppercase tracking-wider font-bold">
+          traduce la frase
+        </p>
       )}
 
-      <h2 className={`text-xl font-bold text-text text-center ${isTranslation ? "italic" : ""} ${isFillBlank ? "leading-relaxed" : ""}`}>
+      <h2 className={`text-xl font-bold text-text text-center leading-relaxed ${isTranslation ? "italic" : ""}`}>
         {question}
       </h2>
 
@@ -40,7 +42,7 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
         {options.map((option) => {
           const isSelected = selected === option
           const isCorrectOption = option === answer
-          let variant = "border-border bg-surface text-text hover:border-primary/50"
+          let variant = "border-border bg-surface text-text hover:border-primary/50 hover:shadow-sm"
 
           if (answered) {
             if (isCorrectOption) {
@@ -51,19 +53,23 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
               variant = "border-border bg-surface/50 text-text-muted"
             }
           } else if (isSelected) {
-            variant = "border-primary bg-primary/5 text-primary"
+            variant = "border-primary bg-primary/5 text-primary shadow-[0_2px_0_#58A700]"
           }
 
           return (
             <button
               key={option}
               onClick={() => !answered && setSelected(option)}
-              className={`w-full py-4 px-6 rounded-2xl border-2 text-left text-lg font-medium transition-all ${variant} ${answered ? "cursor-default" : ""}`}
+              className={`w-full py-4 px-6 rounded-2xl border-[3px] text-left text-lg font-medium transition-all active:scale-[0.98] ${variant} ${answered ? "cursor-default" : "cursor-pointer"}`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <span>{option}</span>
-                {answered && isCorrectOption && <span className="text-lg">✅</span>}
-                {answered && isSelected && !isCorrectOption && <span className="text-lg">❌</span>}
+                {answered && isCorrectOption && (
+                  <span className="text-lg shrink-0 animate-bounce-in">✅</span>
+                )}
+                {answered && isSelected && !isCorrectOption && (
+                  <span className="text-lg shrink-0 animate-bounce-in">❌</span>
+                )}
               </div>
             </button>
           )
@@ -71,18 +77,18 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
       </div>
 
       {answered && correct === false && (
-        <p className="text-sm text-center text-text-muted">
-          Respuesta correcta: <span className="font-bold text-success">{answer}</span>
+        <p className="text-sm text-center text-text-muted animate-fade-in-up bg-error/5 p-3 rounded-xl border border-error/20">
+          respuesta correcta: <span className="font-bold text-success">{answer}</span>
         </p>
       )}
 
-      <div className="pt-4">
+      <div className="pt-2">
         <button
           onClick={handleConfirm}
           disabled={!selected || answered}
-          className="w-full py-3 px-6 bg-primary hover:bg-primary-hover disabled:opacity-50 text-white font-bold rounded-2xl text-lg transition-all active:scale-[0.97] disabled:active:scale-100"
+          className="w-full py-4 px-6 bg-primary text-white font-bold text-lg rounded-2xl shadow-[0_4px_0_#58A700] hover:shadow-[0_2px_0_#58A700] hover:translate-y-[2px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 disabled:active:translate-y-0 uppercase tracking-wide"
         >
-          {answered ? "Siguiente →" : "Confirmar"}
+          {answered ? "siguiente →" : "confirmar"}
         </button>
       </div>
     </div>

@@ -34,57 +34,143 @@ export default async function ProfilePage() {
 
   const streakDays = calculateStreak(user.lastActivity)
 
+  const allAchievements = await prisma.achievement.findMany({ orderBy: { type: "asc" } })
+  const unlockedIds = new Set(user.achievements.map((ua) => ua.achievementId))
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-      <div className="text-center space-y-4">
-        <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-4xl font-bold mx-auto">
-          {user.name?.charAt(0).toUpperCase() ?? "?"}
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold text-text">{user.name ?? "Estudiante"}</h1>
-          <p className="text-text-muted">{user.email}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <StatCard label="XP total" value={user.xp.toString()} color="text-accent" />
-        <StatCard label="Racha" value={`${streakDays} días`} color="text-secondary" />
-        <StatCard label="Ejercicios" value={totalExercises.toString()} color="text-text" />
-        <StatCard label="Precisión" value={`${accuracy}%`} color="text-success" />
-      </div>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-bold text-text">Logros</h2>
-        {user.achievements.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3">
-            {user.achievements.map((ua) => (
-              <div
-                key={ua.id}
-                className="p-4 rounded-2xl border-2 border-border bg-surface flex items-center gap-3"
-              >
-                <span className="text-2xl">{ua.achievement.icon ?? "🏆"}</span>
-                <div>
-                  <p className="font-semibold text-text text-sm">{ua.achievement.title}</p>
-                  <p className="text-xs text-text-muted">{ua.achievement.description}</p>
-                </div>
-              </div>
-            ))}
+    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
+      <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
+        <div className="text-center space-y-4">
+          <div className="relative inline-flex">
+            <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-4xl font-bold mx-auto border-2 border-primary/20">
+              {user.name?.charAt(0).toUpperCase() ?? "?"}
+            </div>
           </div>
-        ) : (
-          <p className="text-text-muted text-center py-8">
-            Completa lecciones para desbloquear logros
-          </p>
-        )}
-      </section>
+          <div>
+            <h1 className="text-2xl font-bold text-text">{user.name ?? "Estudiante"}</h1>
+            <p className="text-sm text-text-muted">{user.email}</p>
+            {user.learningLanguage && (
+              <p className="text-xs text-text-muted mt-1">
+                Aprendiendo: <span className="font-semibold text-primary">{getLangName(user.learningLanguage)}</span>
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="xp total"
+            value={user.xp.toString()}
+            color="text-accent"
+            icon="✨"
+          />
+          <StatCard
+            label="racha"
+            value={`${streakDays} días`}
+            color="text-secondary"
+            icon="🔥"
+          />
+          <StatCard
+            label="ejercicios"
+            value={totalExercises.toString()}
+            color="text-text"
+            icon="📝"
+          />
+          <StatCard
+            label="precisión"
+            value={`${accuracy}%`}
+            color="text-success"
+            icon="🎯"
+          />
+        </div>
+
+        <section className="space-y-4">
+          <h2 className="text-lg font-bold text-text">logros</h2>
+          {allAchievements.length > 0 ? (
+            <div className="grid grid-cols-2 gap-2">
+              {allAchievements.map((ach) => {
+                const unlocked = unlockedIds.has(ach.id)
+                return (
+                  <div
+                    key={ach.id}
+                    className={`p-3 rounded-2xl border-2 transition-all ${
+                      unlocked
+                        ? "border-primary/30 bg-primary/[0.03]"
+                        : "border-border bg-surface opacity-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xl ${unlocked ? "" : "grayscale"}`}>
+                        {unlocked ? ach.icon : "🔒"}
+                      </span>
+                      <div className="min-w-0">
+                        <p className={`font-semibold text-xs truncate ${unlocked ? "text-text" : "text-text-muted"}`}>
+                          {ach.title}
+                        </p>
+                        <p className="text-[10px] text-text-muted truncate">
+                          {unlocked ? ach.description : "??? ??? ???"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <p className="text-text-muted text-center py-8 text-sm">
+              No hay logros disponibles
+            </p>
+          )}
+
+          {user.achievements.length > 0 && (
+            <details className="group">
+              <summary className="text-sm text-text-muted cursor-pointer hover:text-text transition-colors">
+                desbloqueados recientemente
+              </summary>
+              <div className="mt-3 space-y-2">
+                {user.achievements.slice(0, 5).map((ua) => (
+                  <div
+                    key={ua.id}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-border bg-surface animate-fade-in-up"
+                  >
+                    <span className="text-xl">{ua.achievement.icon}</span>
+                    <div>
+                      <p className="font-semibold text-sm text-text">{ua.achievement.title}</p>
+                      <p className="text-xs text-text-muted">
+                        {new Date(ua.unlockedAt).toLocaleDateString("es-ES", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
+        </section>
+      </div>
     </div>
   )
 }
 
-function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
+function StatCard({
+  label,
+  value,
+  color,
+  icon,
+}: {
+  label: string
+  value: string
+  color: string
+  icon: string
+}) {
   return (
-    <div className="p-4 rounded-2xl border-2 border-border bg-surface text-center space-y-1">
-      <p className={`text-2xl font-bold ${color}`}>{value}</p>
-      <p className="text-sm text-text-muted">{label}</p>
+    <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm">
+      <span className="text-lg">{icon}</span>
+      <p className={`text-xl font-bold ${color}`}>{value}</p>
+      <p className="text-xs text-text-muted uppercase tracking-wider">{label}</p>
     </div>
   )
 }
@@ -95,4 +181,20 @@ function calculateStreak(lastActivity: Date | null): number {
   const diff = now.getTime() - lastActivity.getTime()
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   return days <= 1 ? 1 : 0
+}
+
+function getLangName(code: string): string {
+  const names: Record<string, string> = {
+    en: "Inglés",
+    fr: "Francés",
+    de: "Alemán",
+    it: "Italiano",
+    pt: "Portugués",
+    ja: "Japonés",
+    ko: "Coreano",
+    zh: "Chino",
+    ru: "Ruso",
+    ar: "Árabe",
+  }
+  return names[code] ?? code
 }

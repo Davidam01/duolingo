@@ -61,6 +61,10 @@ model User {
   xp            Int        @default(0)
   streak        Int        @default(0)
   lastActivity  DateTime?
+  learningLanguage String? @default("en")
+  nativeLanguage   String? @default("es")
+  onboardingComplete Boolean @default(false)
+  perfectLessons    Int     @default(0)
 
   accounts    Account[]
   sessions    Session[]

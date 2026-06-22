@@ -61,11 +61,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.sub) {
         session.user.id = token.sub
       }
+      if (typeof token.onboardingComplete === "boolean") {
+        session.user.onboardingComplete = token.onboardingComplete
+      }
       return session
     },
-    jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id
+    async jwt({ token }) {
+      if (token.sub) {
+        const user = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { onboardingComplete: true },
+        })
+        token.onboardingComplete = user?.onboardingComplete ?? false
       }
       return token
     },
