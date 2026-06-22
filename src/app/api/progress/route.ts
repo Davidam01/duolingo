@@ -19,3 +19,55 @@ export async function GET() {
 
   return NextResponse.json(progress)
 }
+
+export async function POST(request: Request) {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+  }
+
+  try {
+    const { exerciseId, correct } = await request.json()
+
+    if (!exerciseId) {
+      return NextResponse.json({ error: "exerciseId requerido" }, { status: 400 })
+    }
+
+    const existing = await prisma.progress.findUnique({
+      where: {
+        userId_exerciseId: {
+          userId: session.user.id,
+          exerciseId,
+        },
+      },
+    })
+
+    if (existing) {
+      return NextResponse.json(existing)
+    }
+
+    const progress = await prisma.progress.create({
+      data: {
+        userId: session.user.id,
+        exerciseId,
+        correct,
+        completed: true,
+      },
+    })
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        xp: { increment: correct ? 10 : 2 },
+        lastActivity: new Date(),
+      },
+    })
+
+    return NextResponse.json(progress, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: "Error al guardar progreso" }, { status: 500 })
+  }
+}
