@@ -65,6 +65,7 @@ model User {
   nativeLanguage   String? @default("es")
   onboardingComplete Boolean @default(false)
   perfectLessons    Int     @default(0)
+  lessonsCompleted  Int     @default(0)
 
   accounts    Account[]
   sessions    Session[]

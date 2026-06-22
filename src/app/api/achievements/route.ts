@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
-export async function POST(request: Request) {
+export async function POST() {
   const session = await auth()
   if (!session?.user?.id) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 })
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { xp: true, streak: true, perfectLessons: true },
+      select: { xp: true, streak: true, perfectLessons: true, lessonsCompleted: true },
     })
     if (!user) {
       return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 })
@@ -37,18 +37,9 @@ export async function POST(request: Request) {
         case "STREAK":
           shouldUnlock = user.streak >= ach.threshold
           break
-        case "LESSONS_COMPLETED": {
-          const lessonsDone = await prisma.progress.groupBy({
-            by: ["exerciseId"],
-            where: {
-              userId: session.user.id,
-              completed: true,
-            },
-          })
-          const lessonCount = lessonsDone.length
-          shouldUnlock = lessonCount >= ach.threshold
+        case "LESSONS_COMPLETED":
+          shouldUnlock = user.lessonsCompleted >= ach.threshold
           break
-        }
         case "PERFECT_LESSON":
           shouldUnlock = user.perfectLessons >= ach.threshold
           break

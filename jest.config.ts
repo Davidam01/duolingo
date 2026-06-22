@@ -9,6 +9,8 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   setupFiles: ["<rootDir>/jest.setup.ts"],
+  testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+  transformIgnorePatterns: ["/node_modules/", "/.next/"],
 }
 
 export default config

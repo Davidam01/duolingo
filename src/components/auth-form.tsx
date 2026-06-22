@@ -65,7 +65,6 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       }
 
       router.push("/learn")
-      router.refresh()
     } catch {
       setError("Error de conexión. Verifica que la base de datos esté funcionando.")
       setLoading(false)

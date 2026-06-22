@@ -13,11 +13,10 @@ export type ExerciseData = {
 
 interface LessonFlowProps {
   exercises: ExerciseData[]
-  lessonId: string
-  onComplete: (correct: number, total: number, xp: number) => void
+  onComplete: (correct: number, total: number) => void
 }
 
-export function LessonFlow({ exercises, lessonId, onComplete }: LessonFlowProps) {
+export function LessonFlow({ exercises, onComplete }: LessonFlowProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [completed, setCompleted] = useState(false)
@@ -39,7 +38,6 @@ export function LessonFlow({ exercises, lessonId, onComplete }: LessonFlowProps)
           body: JSON.stringify({
             exerciseId: exercise.id,
             correct,
-            lessonId,
           }),
         })
         if (!res.ok) throw new Error("Error al guardar progreso")
@@ -51,12 +49,11 @@ export function LessonFlow({ exercises, lessonId, onComplete }: LessonFlowProps)
         setCurrentIndex((i) => i + 1)
       } else {
         const total = exercises.length
-        const xp = Math.round((newCorrect / total) * 100)
         setCompleted(true)
-        onComplete(newCorrect, total, xp)
+        onComplete(newCorrect, total)
       }
     },
-    [exercise, currentIndex, exercises.length, correctCount, lessonId, onComplete],
+    [exercise, currentIndex, exercises.length, correctCount, onComplete],
   )
 
   if (completed) {

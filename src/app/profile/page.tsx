@@ -32,7 +32,7 @@ export default async function ProfilePage() {
   const correctExercises = user.progress.filter((p) => p.correct).length
   const accuracy = totalExercises > 0 ? Math.round((correctExercises / totalExercises) * 100) : 0
 
-  const streakDays = calculateStreak(user.lastActivity)
+  const streakDays = user.streak
 
   const allAchievements = await prisma.achievement.findMany({ orderBy: { type: "asc" } })
   const unlockedIds = new Set(user.achievements.map((ua) => ua.achievementId))
@@ -173,14 +173,6 @@ function StatCard({
       <p className="text-xs text-text-muted uppercase tracking-wider">{label}</p>
     </div>
   )
-}
-
-function calculateStreak(lastActivity: Date | null): number {
-  if (!lastActivity) return 0
-  const now = new Date()
-  const diff = now.getTime() - lastActivity.getTime()
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  return days <= 1 ? 1 : 0
 }
 
 function getLangName(code: string): string {

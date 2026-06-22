@@ -36,7 +36,7 @@ export default async function LessonPage({
 
   return (
     <div className="flex-1 flex flex-col">
-      <LessonClient exercises={exercises} lessonId={id} />
+      <LessonClient exercises={exercises} />
     </div>
   )
 }
