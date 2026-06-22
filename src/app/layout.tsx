@@ -47,8 +47,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <a href="#main-content" className="skip-to-content">
+          Saltar al contenido
+        </a>
         <Navbar />
-        <main id="main-content" className="flex-1 flex flex-col">
+        <main id="main-content" className="flex-1 flex flex-col" tabIndex={-1}>
           {children}
         </main>
       </body>

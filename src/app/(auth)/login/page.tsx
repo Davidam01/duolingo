@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-secondary/5 to-background">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-primary/3 to-background">
       <div className="w-full max-w-sm">
         <div className="bg-surface border border-border rounded-3xl p-8 shadow-card space-y-6">
           <div className="text-center space-y-1">

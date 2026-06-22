@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fafaf9;
   --foreground: #1c1917;
@@ -11,13 +13,15 @@
   --color-primary: #58cc02;
   --color-primary-hover: #46a302;
   --color-secondary: #1cb0f6;
+  --color-secondary-hover: #0d8bc4;
   --color-accent: #ff9600;
+  --color-accent-hover: #cc7a00;
   --color-surface: #ffffff;
   --color-surface-alt: #f0f0f0;
   --color-border: #e5e5e5;
   --color-text: #2b2b2b;
   --color-text-muted: #777777;
-  --color-success: #58a700;
+  --color-success: #00a884;
   --color-error: #ff4b4b;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -26,6 +30,11 @@
   --radius-card: 16px;
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --animate-fade-in-up: fade-in-up 0.4s ease-out;
+  --animate-scale-in: scale-in 0.3s ease-out;
+  --animate-bounce-in: bounce-in 0.5s ease-out;
+  --animate-xp-float: xp-float 1.2s ease-out forwards;
+  --animate-spin: spin 1s linear infinite;
 }
 
 body {
@@ -36,13 +45,21 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f0f23;
+    --background: #0f0f1a;
     --foreground: #e8e8e8;
-    --surface: #1a1a3e;
-    --surface-alt: #252550;
-    --border: #2a2a5a;
+    --primary: #4db800;
+    --primary-hover: #3d8a00;
+    --secondary: #1cb0f6;
+    --secondary-hover: #0d8bc4;
+    --accent: #e68600;
+    --accent-hover: #cc7a00;
+    --surface: #1a1a2e;
+    --surface-alt: #252540;
+    --border: #2a2a45;
     --text: #e8e8e8;
-    --text-muted: #8888bb;
+    --text-muted: #8888aa;
+    --success: #008f6f;
+    --error: #ff4b4b;
   }
 }
 
@@ -74,22 +91,20 @@ body {
   to { transform: rotate(360deg); }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.4s ease-out;
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top 0.2s;
 }
 
-.animate-scale-in {
-  animation: scale-in 0.3s ease-out;
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.5s ease-out;
-}
-
-.animate-xp-float {
-  animation: xp-float 1.2s ease-out forwards;
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
+.skip-to-content:focus {
+  top: 8px;
 }
