@@ -36,19 +36,6 @@ export default async function LearnPage() {
   })
   const completedSet = new Set(completedExercises.map((p) => p.exerciseId))
 
-  const allLessonIds = courses.flatMap((c) =>
-    c.sections.flatMap((s) => s.lessons.map((l) => l.id)),
-  )
-
-  const completedLessons = await prisma.progress.groupBy({
-    by: ["exerciseId"],
-    where: {
-      userId: session.user.id,
-      completed: true,
-      exerciseId: { in: allLessonIds },
-    },
-  })
-
   return (
     <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">

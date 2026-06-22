@@ -46,7 +46,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f0f1a;
+    --background: #1a1a2e;
     --foreground: #e8e8e8;
     --primary: #4db800;
     --primary-hover: #3d8a00;

@@ -77,8 +77,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             select: { onboardingComplete: true },
           })
           token.onboardingComplete = dbUser?.onboardingComplete ?? false
-        } catch {
-          token.onboardingComplete = false
+        } catch (e) {
+          if (process.env.NODE_ENV === "development") {
+            console.error("JWT onboarding query failed:", e)
+          }
         }
       }
       return token
