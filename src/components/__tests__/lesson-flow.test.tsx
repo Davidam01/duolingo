@@ -46,13 +46,14 @@ describe("LessonFlow", () => {
     render(<LessonFlow exercises={mockExercises} onComplete={jest.fn()} />)
 
     expect(screen.getByText("Pregunta 1")).toBeInTheDocument()
-    expect(screen.getByText("Ejercicio 1 de 3")).toBeInTheDocument()
+    expect(screen.getByText(/ejercicio 1 de 3/)).toBeInTheDocument()
   })
 
   it("muestra la barra de progreso al inicio (0%)", () => {
     const { container } = render(<LessonFlow exercises={mockExercises} onComplete={jest.fn()} />)
 
-    const progressBar = container.querySelector(".bg-primary")
+    // The progress bar uses bg-gradient-to-r from-primary to-primary/80 class
+    const progressBar = container.querySelector("[style*='width']")
     expect(progressBar).toBeInTheDocument()
     expect(progressBar).toHaveStyle({ width: "0%" })
   })
@@ -68,8 +69,8 @@ describe("LessonFlow", () => {
       jest.advanceTimersByTime(600)
     })
 
-    // Progress = (1/3) * 100 = 33.33...
-    const progressBar = container.querySelector(".bg-primary")
+    // Find by style attribute since class changed to gradient
+    const progressBar = container.querySelector("[style*='width']")
     expect(progressBar).toHaveStyle({ width: "33.33333333333333%" })
   })
 
@@ -86,7 +87,7 @@ describe("LessonFlow", () => {
     })
 
     expect(screen.getByText("Pregunta 2")).toBeInTheDocument()
-    expect(screen.getByText("Ejercicio 2 de 3")).toBeInTheDocument()
+    expect(screen.getByText(/ejercicio 2 de 3/)).toBeInTheDocument()
   })
 
   it("llama a onComplete con correct/total después del último ejercicio", async () => {

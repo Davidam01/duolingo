@@ -86,14 +86,16 @@ export default async function LearnPage() {
 
                         let nodeStyle = "bg-border border-border"
                         let ringStyle = ""
+                        let extraGlow = ""
                         let label = (idx + 1).toString()
 
                         if (allDone) {
                           nodeStyle = "bg-accent border-accent text-white"
                           label = "✓"
                         } else if (isActive || isFirstIncomplete) {
-                          nodeStyle = "bg-primary border-primary text-white shadow-[0_0_0_4px_rgba(88,204,2,0.2)]"
+                          nodeStyle = "bg-primary border-primary text-white"
                           ringStyle = "animate-ping absolute inset-0 rounded-full bg-primary/30"
+                          extraGlow = "animate-glow-pulse"
                         }
 
                         return (
@@ -104,21 +106,21 @@ export default async function LearnPage() {
                           >
                             <div className="relative shrink-0">
                               <div
-                                className={`relative w-[46px] h-[46px] rounded-full border-[3px] flex items-center justify-center text-sm font-bold transition-all ${nodeStyle} group-hover:scale-110`}
+                                className={`relative w-[46px] h-[46px] rounded-full border-[3px] flex items-center justify-center text-sm font-bold transition-all duration-300 ${nodeStyle} ${extraGlow} group-hover:scale-110 group-hover:shadow-lg`}
                               >
                                 {label}
                                 {ringStyle && <div className={ringStyle} />}
                               </div>
                             </div>
 
-                            <div className={`flex-1 p-4 rounded-2xl border-2 transition-all ${
+                            <div className={`flex-1 p-4 rounded-2xl border-2 transition-all duration-300 ${
                               allDone
                                 ? "border-accent/30 bg-accent/[0.03]"
                                 : isActive || isFirstIncomplete
-                                  ? "border-primary/40 bg-primary/[0.03] shadow-sm"
-                                  : "border-border bg-surface opacity-60"
+                                  ? "border-primary/40 bg-primary/[0.03] shadow-sm group-hover:shadow-md group-hover:border-primary/60"
+                                  : "border-border bg-surface opacity-60 group-hover:opacity-80"
                             }`}>
-                              <p className={`font-bold ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
+                              <p className={`font-bold transition-colors ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
                                 {lesson.title}
                               </p>
                               <p className="text-xs text-text-muted">
