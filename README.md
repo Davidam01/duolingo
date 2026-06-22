@@ -1,10 +1,10 @@
-# Duolingo — Aplicación de Aprendizaje de Idiomas
+# Duolingo — Language Learning App
 
-Aplicación full-stack Next.js para el aprendizaje de idiomas con gamificación (XP, rachas, clasificaciones).
+Full-stack Next.js application for language learning with gamification (XP, streaks, leaderboards).
 
-Construida con **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS v4**, **Prisma ORM** y **NextAuth.js**.
+Built with **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS v4**, **Prisma ORM**, and **NextAuth.js**.
 
-## Primeros Pasos
+## Getting Started
 
 ```bash
 npm install
@@ -12,42 +12,42 @@ npx prisma generate
 npm run dev
 ```
 
-## Comandos
+## Commands
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `npm run dev` | Iniciar servidor de desarrollo |
-| `npm run build` | Compilación de producción |
-| `npm run lint` | Verificación ESLint |
-| `npm run typecheck` | Verificación de tipos TypeScript |
-| `npm run test` | Ejecutar tests |
-| `npm run format` | Formateo con Prettier |
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint check |
+| `npm run typecheck` | TypeScript check |
+| `npm run test` | Run tests |
+| `npm run format` | Prettier format |
 
 ## Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **Lenguaje**: TypeScript (estricto)
-- **Estilos**: Tailwind CSS v4
-- **Base de datos**: PostgreSQL + Prisma ORM
-- **Autenticación**: NextAuth.js v5
-- **Tests**: Jest + React Testing Library
+- **Language**: TypeScript (strict)
+- **Styling**: Tailwind CSS v4
+- **Database**: PostgreSQL + Prisma ORM
+- **Auth**: NextAuth.js v5
+- **Testing**: Jest + React Testing Library
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 src/
-├── app/          # Páginas y rutas API de App Router
-├── components/   # Componentes UI reutilizables
-├── lib/          # Cliente Prisma, configuración de auth, utilidades
-└── styles/       # Estilos globales
+├── app/          # App Router pages and API routes
+├── components/   # Reusable UI components
+├── lib/          # Prisma client, auth config, utils
+└── styles/       # Global styles
 prisma/
-└── schema.prisma # Modelos de base de datos
+└── schema.prisma # Database models
 ```
 
-## Flujo de Trabajo
+## Workflow
 
-1. Crear una rama: `feat/descripcion` o `fix/descripcion`
-2. Hacer commits usando Commits Convencionales
-3. Abrir un Pull Request a `main`
-4. Esperar al CI (lint → typecheck → test → build)
-5. Hacer merge cuando esté en verde
+1. Create a branch: `feat/description` or `fix/description`
+2. Commit using Conventional Commits
+3. Open a Pull Request to `main`
+4. Wait for CI (lint → typecheck → test → build)
+5. Merge when green

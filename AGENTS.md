@@ -1,87 +1,87 @@
-# Duolingo — Aplicación de Aprendizaje de Idiomas
+# Duolingo — Language Learning App
 
-Aplicación full-stack Next.js para el aprendizaje de idiomas con gamificación (XP, rachas, clasificaciones).
+Full-stack Next.js application for language learning with gamification (XP, streaks, leaderboards).
 
-## Stack Tecnológico
+## Tech Stack
 
-- **Framework**: Next.js 16 (App Router) — consulta `node_modules/next/dist/docs/` para cambios de API
-- **Lenguaje**: TypeScript (modo estricto)
-- **Estilos**: Tailwind CSS v4
-- **Base de datos**: PostgreSQL + Prisma ORM
-- **Autenticación**: NextAuth.js v5 (beta) con adaptador Prisma
-- **Tests**: Jest + React Testing Library
-- **Linting**: ESLint (config plana) + Prettier
-- **Gestor de paquetes**: npm
+- **Framework**: Next.js 16 (App Router) — see `node_modules/next/dist/docs/` for API changes
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4
+- **Database**: PostgreSQL + Prisma ORM
+- **Auth**: NextAuth.js v5 (beta) with Prisma adapter
+- **Testing**: Jest + React Testing Library
+- **Linting**: ESLint (flat config) + Prettier
+- **Package manager**: npm
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── (auth)/                 # Grupo de páginas de autenticación (login, registro)
-│   ├── learn/                  # Experiencia principal de lecciones
-│   ├── leaderboard/            # Clasificaciones semanales
-│   ├── profile/                # Estadísticas y logros del usuario
-│   └── api/                    # Manejadores de ruta (auth, lecciones, progreso)
-├── components/                 # Componentes UI reutilizables
-├── lib/                        # Cliente Prisma, utilidades, configuración de auth
-└── styles/                     # Estilos globales
+│   ├── (auth)/                 # Auth pages group (login, register)
+│   ├── learn/                  # Main lesson experience
+│   ├── leaderboard/            # Weekly rankings
+│   ├── profile/                # User stats, achievements
+│   └── api/                    # Route handlers (auth, lessons, progress)
+├── components/                 # Reusable UI components
+├── lib/                        # Prisma client, utils, auth config
+└── styles/                     # Global styles
 prisma/
-└── schema.prisma               # Modelos de base de datos
+└── schema.prisma               # Database models
 ```
 
-## Comandos
+## Commands
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `npm run dev` | Iniciar servidor de desarrollo |
-| `npm run build` | Compilación de producción (Turbopack) |
-| `npm run lint` | Verificación ESLint |
-| `npm run typecheck` | Verificación de tipos TypeScript (`tsc --noEmit`) |
-| `npm run test` | Ejecutar tests Jest |
-| `npm run format` | Formateo con Prettier |
-| `npx prisma generate` | Generar cliente Prisma |
-| `npx prisma db push` | Sincronizar esquema con la BD |
-| `npx prisma studio` | Abrir navegador de BD |
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build (Turbopack) |
+| `npm run lint` | ESLint check |
+| `npm run typecheck` | TypeScript check (`tsc --noEmit`) |
+| `npm run test` | Run Jest tests |
+| `npm run format` | Prettier format |
+| `npx prisma generate` | Generate Prisma client |
+| `npx prisma db push` | Push schema to DB |
+| `npx prisma studio` | Open DB browser |
 
-## Convenciones de Código
+## Code Conventions
 
-- **Commits**: Commits Convencionales (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`)
-- **Componentes**: PascalCase, un componente por archivo, exportaciones nombradas
-- **Rutas API**: Exportaciones nombradas para métodos HTTP (GET, POST, PUT, DELETE)
-- **APIs asíncronas**: `params` y `searchParams` son Promesas — usar siempre `await`
-- **Importaciones**: Usar el alias `@/` para `src/`
-- **Proxy**: Usar `proxy.ts` (NO middleware.ts) — cambio en Next.js 16
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`)
+- **Components**: PascalCase, one component per file, named exports
+- **API routes**: Named exports for HTTP methods (GET, POST, PUT, DELETE)
+- **Async request APIs**: `params` and `searchParams` are Promises — always await
+- **Imports**: Use `@/` alias for `src/`
+- **Proxy**: Use `proxy.ts` (NOT middleware.ts) — Next.js 16 breaking change
 
-## Flujo de Trabajo
+## Workflow
 
-1. Crear una rama nueva por cada tarea: `feat/descripcion`, `fix/descripcion`
-2. Hacer commits siguiendo Commits Convencionales
-3. Hacer push y abrir un Pull Request a `main`
-4. El CI debe pasar (lint → typecheck → test → build) antes del merge
-5. Hacer merge solo cuando el CI esté en verde
+1. Create a new branch per task: `feat/description`, `fix/description`
+2. Make commits following Conventional Commits
+3. Push and open a Pull Request to `main`
+4. CI must pass (lint → typecheck → test → build) before merge
+5. Merge only when CI is green
 
-## Agentes y Skills
+## Agents & Skills
 
-Este proyecto usa el skill `frontend-design` para desarrollo de UI. Subagentes disponibles:
+This project uses the `frontend-design` skill for UI development. Subagents available:
 
-| Invocación | Propósito |
-|-----------|-----------|
+| Invocation | Purpose |
+|-----------|---------|
 | `@redactor` | Copywriting: microcopias, textos de ejercicios, feedback gamificado |
-| `@seo` | SEO técnico: meta tags, Open Graph, datos estructurados, sitemaps |
+| `@seo` | SEO técnico: meta tags, Open Graph, structured data, sitemaps |
 | `@revisor` | Code review: seguridad, tipos, buenas prácticas |
 | `@accesibilidad` | Accesibilidad: WCAG, ARIA, contraste, teclado |
 | `@db-designer` | Modelos Prisma, migraciones, consultas optimizadas |
 | `@ui-designer` | UI con el skill `frontend-design`, componentes e identidad visual |
 
-## Notas de Migración a Next.js 16
+## Next.js 16 Migration Notes
 
-- Middleware → `proxy.ts` (exportar función `proxy`, runtime Node.js)
-- `params` y `searchParams` son Promesas — usar `await`
-- `cookies()`, `headers()` son completamente asíncronas
-- No existe `next lint` — usar ESLint CLI directamente
-- Turbopack es el predeterminado para dev y build
-- Las rutas paralelas requieren archivos `default.js` explícitos
-- `revalidateTag(tag, profile)` requiere un segundo argumento
-- Usar `next/image` (no `next/legacy/image`)
-- Node 20.9+ requerido
+- Middleware → `proxy.ts` (export `proxy` function, Node.js runtime)
+- `params` and `searchParams` are Promises — must `await`
+- `cookies()`, `headers()` are fully async
+- No `next lint` — use ESLint CLI directly
+- Turbopack is default for dev and build
+- Parallel routes require explicit `default.js` files
+- `revalidateTag(tag, profile)` requires 2nd argument
+- Use `next/image` (not `next/legacy/image`)
+- Node 20.9+ required
