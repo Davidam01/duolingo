@@ -38,9 +38,10 @@ export default async function LeaderboardPage() {
         </p>
       </div>
 
+      {/* Current user card */}
       {currentUser && (
-        <div className="bg-surface border-2 border-primary rounded-2xl p-4 flex items-center gap-4 shadow-card animate-fade-in-up">
-          <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
+        <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-2 border-primary/40 rounded-2xl p-4 flex items-center gap-4 shadow-lg animate-slide-up">
+          <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg shadow-md">
             {currentRank}
           </div>
           <div className="flex-1">
@@ -53,24 +54,54 @@ export default async function LeaderboardPage() {
         </div>
       )}
 
+      {/* Top 3 podium */}
+      {topUsers.length >= 3 && (
+        <div className="flex items-end justify-center gap-3 px-4 pt-4">
+          {[1, 0, 2].map((pos) => {
+            const user = topUsers[pos]
+            const rank = pos + 1
+            const heights = ["h-24", "h-20", "h-16"]
+            const medals = ["🥇", "🥈", "🥉"]
+            return (
+              <div key={user.id} className="flex flex-col items-center gap-2 animate-slide-up" style={{ animationDelay: `${pos * 150}ms` }}>
+                <div className="text-2xl">{medals[pos]}</div>
+                <div
+                  className={`w-20 rounded-t-xl flex items-center justify-center font-bold text-white text-sm transition-all hover:opacity-90 ${heights[pos]} ${
+                    user.id === userId
+                      ? "bg-gradient-to-t from-primary to-primary/70"
+                      : "bg-gradient-to-t from-text-muted to-border"
+                  }`}
+                >
+                  #{rank}
+                </div>
+                <p className="text-xs font-semibold text-text text-center max-w-[80px] truncate">
+                  {user.name ?? "Anónimo"}
+                </p>
+                <p className="text-[10px] font-bold text-accent">{user.xp} XP</p>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Rest of the list */}
       <div className="space-y-2">
-        {topUsers.map((user, index) => {
-          const rank = index + 1
+        {topUsers.slice(topUsers.length >= 3 ? 3 : 0).map((user, index) => {
+          const rank = index + (topUsers.length >= 3 ? 4 : 1)
           const isMe = user.id === userId
-          const medal =
-            rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : null
 
           return (
             <div
               key={user.id}
-              className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+              className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200 hover:shadow-md animate-slide-up ${
                 isMe
-                  ? "border-primary bg-primary/5"
-                  : "border-border bg-surface hover:border-primary/30"
+                  ? "border-primary/50 bg-primary/5"
+                  : "border-border bg-surface hover:border-primary/30 hover:-translate-y-0.5"
               }`}
+              style={{ animationDelay: `${(index + 3) * 50}ms` }}
             >
-              <div className="w-10 h-10 flex items-center justify-center text-xl font-bold">
-                {medal ?? `#${rank}`}
+              <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-text-muted">
+                #{rank}
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-text">{user.name ?? "Anónimo"}</p>

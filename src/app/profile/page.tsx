@@ -40,11 +40,17 @@ export default async function ProfilePage() {
   return (
     <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
-        <div className="text-center space-y-4">
+        {/* Avatar y nombre */}
+        <div className="text-center space-y-4 animate-fade-in-up">
           <div className="relative inline-flex">
-            <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-4xl font-bold mx-auto border-2 border-primary/20">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center text-4xl font-bold mx-auto border-2 border-primary/20 shadow-lg">
               {user.name?.charAt(0).toUpperCase() ?? "?"}
             </div>
+            {streakDays > 0 && (
+              <div className="absolute -bottom-1 -right-1 text-lg animate-streak-fire">
+                🔥
+              </div>
+            )}
           </div>
           <div>
             <h1 className="text-2xl font-bold text-text">{user.name ?? "Estudiante"}</h1>
@@ -57,47 +63,46 @@ export default async function ProfilePage() {
           </div>
         </div>
 
+        {/* Stats grid */}
         <div className="grid grid-cols-2 gap-3">
-          <StatCard
-            label="xp total"
-            value={user.xp.toString()}
-            color="text-accent"
-            icon="✨"
-          />
-          <StatCard
-            label="racha"
-            value={`${streakDays} días`}
-            color="text-secondary"
-            icon="🔥"
-          />
-          <StatCard
-            label="ejercicios"
-            value={totalExercises.toString()}
-            color="text-text"
-            icon="📝"
-          />
-          <StatCard
-            label="precisión"
-            value={`${accuracy}%`}
-            color="text-success"
-            icon="🎯"
-          />
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up">
+            <span className="text-lg">✨</span>
+            <p className="text-xl font-bold text-accent animate-count-up">{user.xp}</p>
+            <p className="text-xs text-text-muted uppercase tracking-wider">xp total</p>
+          </div>
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up delay-100">
+            <span className={`text-lg ${streakDays > 0 ? "animate-streak-fire" : ""}`}>🔥</span>
+            <p className={`text-xl font-bold ${streakDays > 0 ? "text-secondary" : "text-text-muted"}`}>{streakDays} días</p>
+            <p className="text-xs text-text-muted uppercase tracking-wider">racha</p>
+          </div>
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up delay-200">
+            <span className="text-lg">📝</span>
+            <p className="text-xl font-bold text-text">{totalExercises}</p>
+            <p className="text-xs text-text-muted uppercase tracking-wider">ejercicios</p>
+          </div>
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up delay-300">
+            <span className="text-lg">🎯</span>
+            <p className={`text-xl font-bold ${accuracy >= 80 ? "text-success" : accuracy >= 50 ? "text-accent" : "text-text"}`}>{accuracy}%</p>
+            <p className="text-xs text-text-muted uppercase tracking-wider">precisión</p>
+          </div>
         </div>
 
-        <section className="space-y-4">
+        {/* Logros */}
+        <section className="space-y-4 animate-fade-in-up">
           <h2 className="text-lg font-bold text-text">logros</h2>
           {allAchievements.length > 0 ? (
             <div className="grid grid-cols-2 gap-2">
-              {allAchievements.map((ach) => {
+              {allAchievements.map((ach, i) => {
                 const unlocked = unlockedIds.has(ach.id)
                 return (
                   <div
                     key={ach.id}
-                    className={`p-3 rounded-2xl border-2 transition-all ${
+                    className={`p-3 rounded-2xl border-2 transition-all duration-300 hover:shadow-md animate-slide-up ${
                       unlocked
-                        ? "border-primary/30 bg-primary/[0.03]"
+                        ? "border-primary/30 bg-gradient-to-br from-primary/[0.03] to-transparent hover:border-primary/50"
                         : "border-border bg-surface opacity-50"
                     }`}
+                    style={{ animationDelay: `${i * 50}ms` }}
                   >
                     <div className="flex items-center gap-2">
                       <span className={`text-xl ${unlocked ? "" : "grayscale"}`}>
@@ -151,26 +156,6 @@ export default async function ProfilePage() {
           )}
         </section>
       </div>
-    </div>
-  )
-}
-
-function StatCard({
-  label,
-  value,
-  color,
-  icon,
-}: {
-  label: string
-  value: string
-  color: string
-  icon: string
-}) {
-  return (
-    <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm">
-      <span className="text-lg">{icon}</span>
-      <p className={`text-xl font-bold ${color}`}>{value}</p>
-      <p className="text-xs text-text-muted uppercase tracking-wider">{label}</p>
     </div>
   )
 }
