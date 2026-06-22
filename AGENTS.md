@@ -116,6 +116,10 @@ prisma/
 - **Sesión extendida**: `session.user.id` y `session.user.onboardingComplete` disponibles tras tipado en `src/types/next-auth.d.ts`
 - **ExerciseCard**: unifica MultipleChoice, FillBlank y Translation. Usar `key={exercise.id}` para evitar estado atascado
 - **Driver adapter**: `@prisma/adapter-better-sqlite3` para SQLite en Prisma 7
+- **Router**: NO usar `router.refresh()` después de `router.push()` — causa race condition en RSC (Next.js 16)
+- **Proxy publicPaths**: incluir siempre `/api/ruta` además de `/ruta` para APIs que necesiten bypass
+- **JWT callback**: siempre con try/catch, NO hardcodear valores por defecto en catch (mantener el anterior)
+- **better-sqlite3**: requiere `npm approve-scripts better-sqlite3` tras instalar (native addon)
 
 ## Flujo de Onboarding
 
