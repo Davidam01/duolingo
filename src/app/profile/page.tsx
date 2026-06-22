@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
+import { LanguageChanger } from "@/components/language-changer"
 
 export const metadata: Metadata = {
   title: "Perfil",
@@ -59,6 +60,11 @@ export default async function ProfilePage() {
               <p className="text-xs text-text-muted mt-1">
                 Aprendiendo: <span className="font-semibold text-primary">{getLangName(user.learningLanguage)}</span>
               </p>
+            )}
+            {user.learningLanguage && (
+              <div className="mt-2">
+                <LanguageChanger currentLanguage={user.learningLanguage} />
+              </div>
             )}
           </div>
         </div>

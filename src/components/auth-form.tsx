@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 type AuthMode = "login" | "register"
 
 export function AuthForm({ mode }: { mode: AuthMode }) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -64,7 +63,8 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         return
       }
 
-      router.push("/learn")
+      // Use full page navigation to ensure session cookie is properly sent
+      window.location.href = "/learn"
     } catch {
       setError("Error de conexión. Verifica que la base de datos esté funcionando.")
       setLoading(false)

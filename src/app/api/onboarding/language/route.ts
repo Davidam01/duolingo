@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { language } = await request.json()
+    const { language, skipOnboarding } = await request.json()
     if (!language) {
       return NextResponse.json({ error: "language requerido" }, { status: 400 })
     }
@@ -18,7 +18,9 @@ export async function POST(request: Request) {
       where: { id: session.user.id },
       data: {
         learningLanguage: language,
-        onboardingComplete: true,
+        // If skipOnboarding is true, don't change onboarding status
+        // This allows changing language from profile without re-doing onboarding
+        ...(skipOnboarding ? {} : { onboardingComplete: true }),
       },
     })
 
