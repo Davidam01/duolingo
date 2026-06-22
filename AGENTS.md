@@ -37,9 +37,13 @@ src/
 │   ├── navbar-client.tsx       # Nav responsive: top desktop, bottom tabs mobile
 │   ├── lesson-flow.tsx         # Flujo de ejercicios con progreso
 │   └── exercise-card.tsx       # Componente único de ejercicio (3 tipos)
+├── __tests__/
+│   └── api/
+│       └── api-integration.test.ts  # Tests de integración con BD SQLite real
 ├── lib/
 │   ├── prisma.ts               # Cliente Prisma con adapter better-sqlite3
 │   ├── auth.ts                 # Configuración NextAuth (Credentials + Google)
+│   ├── achievements.ts         # Lógica de verificación de logros
 │   └── seo.ts                  # SEO config español
 ├── types/
 │   └── next-auth.d.ts          # Tipos extendidos de sesión
@@ -58,7 +62,9 @@ prisma/
 | `npm run build` | Compilación de producción (Turbopack) |
 | `npm run lint` | Verificación ESLint |
 | `npm run typecheck` | Verificación de tipos TypeScript (`tsc --noEmit`) |
-| `npm run test` | Ejecutar tests Jest |
+| `npm run test` | Ejecutar todos los tests (unit + integración) |
+| `npx jest src/components/` | Solo tests unitarios de componentes |
+| `npx jest src/__tests__/` | Solo tests de integración con BD |
 | `npm run format` | Formateo con Prettier |
 | `npm run prisma:seed` | Poblar BD con datos de ejemplo |
 | `npx prisma generate` | Generar cliente Prisma |
@@ -104,6 +110,66 @@ prisma/
 | `bounce-in` | 0.5s | Íconos de celebración |
 | `xp-float` | 1.2s | XP flotante al ganar |
 | `streak-fire` | 2s | Pulso de racha (infinite) |
+
+## Tests
+
+### Tests Unitarios (59 tests)
+
+Ubicación: `src/components/__tests__/`
+
+| Archivo | Descripción |
+|---------|-------------|
+| `auth-form.test.tsx` | Login, register, errores, Google sign-in, navegación post-login |
+| `exercise-card.test.tsx` | 3 tipos de ejercicio, feedback correcto/incorrecto, estados |
+| `language-changer.test.tsx` | Selector de idioma, toggle, llamada API, loading/error |
+| `lesson-flow.test.tsx` | Flujo de lección, progreso, pantalla de completado |
+| `navbar-client.test.tsx` | Sesión/no sesión, XP counter, logout, enlaces activos |
+
+Entorno: `jsdom` — no requiere base de datos.
+
+### Tests de Integración (28 tests)
+
+Ubicación: `src/__tests__/api/api-integration.test.ts`
+
+Usan una base de datos SQLite real (`test.db`) que se crea y destruye automáticamente.
+
+| Ruta | Tests | Cobertura |
+|------|-------|-----------|
+| `GET /api/lessons` | 4 | 401 sin auth, orden ASC, count exercises, section/course info |
+| `POST /api/lessons/complete` | 6 | 401, XP 100%, XP parcial, streak, achievements async, 500 invalid body |
+| `GET /api/progress` | 3 | 401, empty array, entries con exercise info |
+| `POST /api/progress` | 4 | 401, 400 sin exerciseId, create 201, no duplicate (200) |
+| `POST /api/achievements` | 5 | 401, unlock thresholds, no re-unlock, details, empty |
+| `GET /api/leaderboard` | 6 | 401, sorted desc, isCurrentUser, rank/xp/count, 50 limit, dates |
+
+Entorno: `@jest-environment node` — usa `Request`/`Response` globales de Node 20+.
+
+**Setup automático**: El primer test ejecuta `npx prisma db push --accept-data-loss` (tarda ~3-5s)
+para crear `test.db` con el esquema. Se limpia al finalizar (`afterAll`).
+
+**Aislamiento**: `beforeEach` resetea las stats del usuario de test (xp, streak, lessonsCompleted,
+perfectLessons) y limpia progress/achievements para evitar contaminación entre tests.
+
+**Achievements asíncronos**: `verifyAchievements` se dispara con `.catch()` (fire-and-forget)
+desde `POST /api/lessons/complete`. Los tests usan polling (20 intentos × 100ms) en vez de
+setTimeout fijo para esperar a que se complete.
+
+**`test.db`** está en `.gitignore`. Si un test falla y no se limpia, borrar manualmente:
+```bash
+rm -f test.db test.db-journal test.db-wal test.db-shm
+```
+
+### CI Pipeline
+
+El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
+
+1. `npm ci` — instalar dependencias
+2. `npx prisma generate` — generar cliente Prisma
+3. `npm run lint` — ESLint
+4. `npm run typecheck` — TypeScript
+5. **Unit tests** (`npx jest src/components/`) — feedback rápido
+6. **Integration tests** (`npx jest src/__tests__/`) — validación con BD real
+7. `npm run build` — compilación Next.js
 
 ## Convenciones de Código
 
