@@ -30,7 +30,7 @@ export default async function LeaderboardPage() {
   const totalParticipants = topUsers.length
 
   return (
-    <div className="flex-1 flex flex-col bg-background">
+    <div className="flex-1 flex flex-col bg-surface">
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
       <div className="text-center space-y-1">
         <h1 className="text-3xl font-bold text-text">Clasificación global</h1>

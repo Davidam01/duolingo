@@ -85,13 +85,11 @@ prisma/
 | `error` | `#FF4B4B` | Rojo — errores, respuestas incorrectas |
 | `success` | `#00A884` | Teal — respuestas correctas, lecciones completadas |
 | `purple` | `#CE82FF` | Púrpura — logros, ligas |
-| `yellow` | `#FFC800` | Amarillo — celebraciones XP |
-| `text` | `#3C3C3C` | Casi negro — texto principal |
-| `text-muted` | `#777777` | Gris — texto secundario |
-| `background` | `#F5F5F5` | Fondo general de la app |
+| `text` | `#1A1A1A` | Casi negro — texto principal |
+| `text-muted` | `#888888` | Gris — texto secundario |
+| `background` | `#FFFFFF` | Fondo general de la app (blanco sólido) |
 | `surface` | `#FFFFFF` | Blanco — fondos de tarjeta y navbar |
-| `border` | `#E5E5E5` | Gris claro — bordes de cards |
-| `border-light` | `#EFEFEF` | Gris muy claro — bordes de navbar, divisores |
+| `border` | `#E8E8E8` | Gris claro — bordes de cards |
 
 ### Tipografía
 - **Display**: Fredoka (Google Font) — lowercase, bold para títulos
@@ -110,9 +108,8 @@ prisma/
 |--------|----------|-----|
 | `fade-in-up` | 0.4s | Entrada de componentes |
 | `scale-in` | 0.3s | Pantalla de resultado |
-| `bounce-in` | 0.5s | Íconos de celebración |
-| `xp-float` | 1.2s | XP flotante al ganar |
-| `streak-fire` | 2s | Pulso de racha (infinite) |
+| `bounce-in` | 0.5s | Íconos de celebración (solo landing) |
+| `streak-fire` | 2s | Pulso de racha (infinite, solo dashboard) |
 
 ## Tests
 

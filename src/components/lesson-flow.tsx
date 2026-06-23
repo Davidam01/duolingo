@@ -84,7 +84,7 @@ export function LessonFlow({ exercises, onComplete }: LessonFlowProps) {
             {Array.from({ length: total }).map((_, i) => (
               <div
                 key={i}
-                className={`w-3 h-3 rounded-full transition-all duration-500 animate-count-up ${
+                className={`w-3 h-3 rounded-full transition-all duration-500 animate-fade-in ${
                   i < correctCount
                     ? "bg-success shadow-[0_0_6px_rgba(0,168,132,0.4)]"
                     : "bg-border"
@@ -94,7 +94,7 @@ export function LessonFlow({ exercises, onComplete }: LessonFlowProps) {
             ))}
           </div>
         </div>
-        <p className="text-4xl font-bold text-accent animate-count-up">+{earnedXp} XP</p>
+        <p className="text-4xl font-bold text-accent animate-fade-in">+{earnedXp} XP</p>
       </div>
     )
   }

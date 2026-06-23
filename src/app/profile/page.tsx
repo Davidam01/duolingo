@@ -39,7 +39,7 @@ export default async function ProfilePage() {
   const unlockedIds = new Set(user.achievements.map((ua) => ua.achievementId))
 
   return (
-    <div className="flex-1 flex flex-col bg-background">
+    <div className="flex-1 flex flex-col bg-surface">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
         {/* Avatar y nombre */}
         <div className="text-center space-y-4 animate-fade-in-up">
@@ -73,7 +73,7 @@ export default async function ProfilePage() {
         <div className="grid grid-cols-2 gap-3">
           <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up">
             <span className="text-lg">✨</span>
-            <p className="text-xl font-bold text-accent animate-count-up">{user.xp}</p>
+            <p className="text-xl font-bold text-accent">{user.xp}</p>
             <p className="text-xs text-text-muted uppercase tracking-wider">xp total</p>
           </div>
           <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up delay-100">

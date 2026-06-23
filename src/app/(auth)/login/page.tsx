@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-white to-background">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-surface">
       <div className="w-full max-w-sm">
-        <div className="bg-white border-2 border-border-light rounded-2xl p-8 space-y-6 shadow-md">
+        <div className="bg-surface border border-border rounded-2xl p-8 space-y-6">
           <div className="text-center space-y-2">
             <div className="text-4xl mb-1">🦉</div>
             <h1 className="text-2xl font-bold font-display text-text">iniciar sesión</h1>
