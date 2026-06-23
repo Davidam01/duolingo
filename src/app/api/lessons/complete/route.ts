@@ -52,11 +52,9 @@ export async function POST(request: Request) {
     })
 
     // Verify achievements after completing lesson
-    verifyAchievements(userId).catch(() => {
-      // Silently fail - achievements are non-critical
-    })
+    const unlocked = await verifyAchievements(userId)
 
-    return NextResponse.json({ xp: xpEarned })
+    return NextResponse.json({ xp: xpEarned, unlocked })
   } catch {
     return NextResponse.json({ error: "Error al completar lección" }, { status: 500 })
   }
