@@ -30,7 +30,7 @@ export default async function OnboardingLanguagePage() {
     where: { id: session.user.id },
     select: { onboardingComplete: true },
   })
-  if (user?.onboardingComplete) redirect("/learn")
+  if (user?.onboardingComplete) redirect("/")
 
   const courses = await prisma.course.findMany({
     select: { id: true, language: true, title: true, level: true, image: true },

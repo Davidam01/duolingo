@@ -24,7 +24,7 @@ export default async function LessonPage({
     include: { exercises: true },
   })
 
-  if (!lesson) redirect("/learn")
+  if (!lesson) redirect("/")
 
   const exercises = lesson.exercises.map((ex) => ({
     id: ex.id,

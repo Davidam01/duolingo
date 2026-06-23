@@ -10,6 +10,7 @@ interface NavbarClientProps {
 }
 
 const links = [
+  { href: "/", label: "Inicio", icon: "🏠" },
   { href: "/learn", label: "Aprender", icon: "🦉" },
   { href: "/leaderboard", label: "Clasificación", icon: "🏆" },
   { href: "/profile", label: "Perfil", icon: "👤" },

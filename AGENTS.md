@@ -19,6 +19,7 @@ Aplicación full-stack Next.js para el aprendizaje de idiomas con gamificación 
 src/
 ├── app/
 │   ├── (auth)/                 # Grupo de páginas de autenticación (login, registro)
+│   ├── page.tsx                # Landing (no auth) o dashboard con stats (auth)
 │   ├── learn/                  # Experiencia principal de lecciones (ruta vertical con nodos)
 │   ├── leaderboard/            # Clasificaciones globales
 │   ├── profile/                # Estadísticas y logros del usuario (galería de badges)
@@ -98,7 +99,7 @@ prisma/
 ### Patrones UI
 - **Botones 3D**: sombra inferior que se reduce en hover/active (efecto físico)
 - **Ruta de aprendizaje**: scroll vertical con nodos conectados por línea. Nodo activo pulsa, completado es dorado, bloqueado es gris
-- **Navbar**: top bar en desktop, bottom tabs en móvil (🦉 Aprender / 🏆 Clasificación / 👤 Perfil / 🚪 Salir)
+- **Navbar**: top bar en desktop, bottom tabs en móvil (🏠 Inicio / 🦉 Aprender / 🏆 Clasificación / 👤 Perfil / 🚪 Salir)
 - **ExerciseCard**: feedback inmediato ✅/❌ + respuesta correcta, delay 600ms antes de avanzar
 - **Logros**: galería en grid 2-columnas, desbloqueados a color, bloqueados en gris con candado
 
@@ -196,7 +197,7 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 
 1. Usuario se registra → `onboardingComplete = false`
 2. Proxy redirige a `/onboarding/language` si no ha completado onboarding
-3. Usuario selecciona idioma → `POST /api/onboarding/language` → redirige a `/learn`
+3. Usuario selecciona idioma → `POST /api/onboarding/language` → redirige a `/` (home dashboard)
 4. `onboardingComplete = true`, proxy ya no redirige
 
 ## Sistema de Logros
