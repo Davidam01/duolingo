@@ -51,7 +51,7 @@ export default function RootLayout({
           Saltar al contenido
         </a>
         <Navbar />
-        <main id="main-content" className="flex-1 flex flex-col" tabIndex={-1}>
+        <main id="main-content" className="flex-1 flex flex-col bg-surface" tabIndex={-1}>
           {children}
         </main>
       </body>
