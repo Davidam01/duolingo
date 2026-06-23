@@ -36,6 +36,25 @@ export default async function LearnPage() {
   })
   const completedSet = new Set(completedExercises.map((p) => p.exerciseId))
 
+  // Build a map of all exercise IDs per lesson for prerequisite checking
+  const lessonExerciseIds = new Map<string, string[]>()
+  for (const section of courses.flatMap((c) => c.sections)) {
+    for (const lesson of section.lessons) {
+      lessonExerciseIds.set(
+        lesson.id,
+        lesson.exercises.map((e) => e.id),
+      )
+    }
+  }
+
+  function isLessonAccessible(lesson: typeof courses[0]['sections'][0]['lessons'][0], section: typeof courses[0]['sections'][0], idx: number): boolean {
+    if (idx === 0) return true
+    const prevLesson = section.lessons[idx - 1]
+    if (!prevLesson) return true
+    const prevIds = lessonExerciseIds.get(prevLesson.id) ?? []
+    return prevIds.every((id) => completedSet.has(id))
+  }
+
   return (
     <div className="flex-1 flex flex-col bg-surface">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
@@ -91,6 +110,8 @@ export default async function LearnPage() {
                           l.exercises.every((e) => completedSet.has(e.id)),
                         ))
                         const isActive = started && !allDone
+                        const accessible = isLessonAccessible(lesson, section, idx)
+                        const isLocked = !allDone && !started && !accessible
 
                         let nodeStyle = "bg-border border-border"
                         let ringStyle = ""
@@ -106,15 +127,11 @@ export default async function LearnPage() {
                           extraGlow = "animate-glow-pulse"
                         }
 
-                        return (
-                          <Link
-                            key={lesson.id}
-                            href={`/lessons/${lesson.id}`}
-                            className="flex items-center gap-4 group"
-                          >
+                        const content = (
+                          <>
                             <div className="relative shrink-0">
                               <div
-                                className={`relative w-[46px] h-[46px] rounded-full border-[3px] flex items-center justify-center text-sm font-bold transition-all duration-300 ${nodeStyle} ${extraGlow} group-hover:scale-110 group-hover:shadow-lg`}
+                                className={`relative w-[46px] h-[46px] rounded-full border-[3px] flex items-center justify-center text-sm font-bold transition-all duration-300 ${nodeStyle} ${extraGlow} ${isLocked ? "" : "group-hover:scale-110 group-hover:shadow-lg"}`}
                               >
                                 {label}
                                 {ringStyle && <div className={ringStyle} />}
@@ -126,10 +143,12 @@ export default async function LearnPage() {
                                 ? "border-accent/30 bg-accent/[0.03]"
                                 : isActive || isFirstIncomplete
                                   ? "border-primary/30 bg-surface shadow-sm hover:shadow-md hover:border-primary/50"
-                                  : "border-border bg-surface opacity-50"
+                                  : isLocked
+                                    ? "border-border bg-surface opacity-30"
+                                    : "border-border bg-surface opacity-50"
                             }`}>
                               <p className={`font-bold transition-colors ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
-                                {lesson.title}
+                                {isLocked ? `${lesson.title} 🔒` : lesson.title}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5">
                                 <p className="text-xs text-text-muted">
@@ -144,6 +163,20 @@ export default async function LearnPage() {
                                 </span>
                               </div>
                             </div>
+                          </>
+                        )
+
+                        return isLocked ? (
+                          <div key={lesson.id} className="flex items-center gap-4 cursor-default">
+                            {content}
+                          </div>
+                        ) : (
+                          <Link
+                            key={lesson.id}
+                            href={`/lessons/${lesson.id}`}
+                            className="flex items-center gap-4 group"
+                          >
+                            {content}
                           </Link>
                         )
                       })}

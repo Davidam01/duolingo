@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { LanguageChanger } from "@/components/language-changer"
+import { getLangName } from "@/lib/languages"
 
 export const metadata: Metadata = {
   title: "Perfil",
@@ -166,18 +167,4 @@ export default async function ProfilePage() {
   )
 }
 
-function getLangName(code: string): string {
-  const names: Record<string, string> = {
-    en: "Inglés",
-    fr: "Francés",
-    de: "Alemán",
-    it: "Italiano",
-    pt: "Portugués",
-    ja: "Japonés",
-    ko: "Coreano",
-    zh: "Chino",
-    ru: "Ruso",
-    ar: "Árabe",
-  }
-  return names[code] ?? code
-}
+

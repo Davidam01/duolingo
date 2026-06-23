@@ -38,7 +38,7 @@ src/
 │   ├── navbar-client.tsx       # Nav responsive: top desktop, bottom tabs mobile
 │   ├── lesson-flow.tsx         # Flujo de ejercicios con progreso
 │   ├── achievement-notification.tsx # Overlay de logro desbloqueado + sonido
-│   └── exercise-card.tsx       # Componente único de ejercicio (3 tipos)
+│   └── exercise-card.tsx       # Componente único de ejercicio (6 tipos)
 ├── __tests__/
 │   └── api/
 │       └── api-integration.test.ts  # Tests de integración con BD SQLite real
@@ -177,6 +177,24 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 6. **Integration tests** (`npx jest src/__tests__/`) — validación con BD real
 7. `npm run build` — compilación Next.js
 
+## Control de Acceso a Lecciones
+
+1. **Proxy** (`src/proxy.ts`): Protege rutas privadas. Usa `NextResponse.redirect`, pasa `request` a `auth()`, excluye `/api/*` del matcher. Check `onboardingComplete !== true` (no `=== false`).
+2. **Prerrequisitos**: `learn/page.tsx` usa `isLessonAccessible()` para evitar clics en lecciones con la anterior incompleta (muestra 🔒). `lessons/[id]/page.tsx` verifica server-side que la lección anterior esté completada antes de renderizar.
+3. **Lecciones vacías**: Si `exercises.length === 0`, `lessons/[id]/page.tsx` redirige a `/learn` inmediatamente. `error.tsx` tiene link a `/learn`.
+
+## Seed (Reseeding)
+
+El seed (`prisma/seed.ts`) ejecuta `deleteMany` en orden inverso de FK al inicio para evitar duplicados al reseedear. `dev.db*` está en `.gitignore`.
+
+```
+Route protection: proxy.ts → publicPaths + auth → onboarding check
+                   ↓
+Learn page: lessons list → isLessonAccessible → locked/disabled
+                   ↓
+Lesson page: server-side prerequisite check → empty guard → render
+```
+
 ## Convenciones de Código
 
 - **Commits**: Commits Convencionales (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`)
@@ -187,7 +205,12 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 - **Proxy**: Usar `proxy.ts` (NO middleware.ts) — cambio en Next.js 16
 - **Sesión extendida**: `session.user.id` y `session.user.onboardingComplete` disponibles tras tipado en `src/types/next-auth.d.ts`
 - **ExerciseCard**: unifica MultipleChoice, FillBlank, Translation, Listening, Ordering y FreeForm. Usar `key={exercise.id}` para evitar estado atascado
+- **Dificultad**: Cada ejercicio tiene `difficulty` (`BEGINNER`/`INTERMEDIATE`/`ADVANCED`). Badge visible en ExerciseCard (★/★★/★★★). En /learn, cada lección muestra su rango de dificultad. XP multiplicado por factor de dificultad (×1, ×1.5, ×2).
+- **Comparación**: Normalizada con `toLowerCase().trim()` en `lesson-flow.tsx` para ORDERING y FREE_FORM.
 - **Driver adapter**: `@prisma/adapter-better-sqlite3` para SQLite en Prisma 7
+- **Router**: NO usar `router.refresh()` después de `router.push()` — causa race condition en RSC (Next.js 16)
+- **Proxy publicPaths**: incluir siempre `/api/ruta` además de `/ruta` para APIs que necesiten bypass
+- **JWT callback**: siempre con try/catch, NO hardcodear valores por defecto en catch (mantener el anterior)
 - **Router**: NO usar `router.refresh()` después de `router.push()` — causa race condition en RSC (Next.js 16)
 - **Proxy publicPaths**: incluir siempre `/api/ruta` además de `/ruta` para APIs que necesiten bypass
 - **JWT callback**: siempre con try/catch, NO hardcodear valores por defecto en catch (mantener el anterior)
@@ -197,6 +220,12 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 - **Lecciones completadas**: `user.lessonsCompleted` se incrementa en cada llamada exitosa a `/api/lessons/complete`. `user.perfectLessons` se incrementa solo si `correct === total`.
 - **Verificación de logros**: `verifyAchievements` se ejecuta con `await` dentro de `POST /api/lessons/complete`. Los logros desbloqueados se devuelven en el response (`{ xp, unlocked }`). El cliente (`lesson-client.tsx`) muestra una notificación con sonido vía `AchievementNotification`.
 - **Leaderboard**: Es global (XP total), no semanal. El modelo `Leaderboard` con `weekStart`/`weekEnd` existe pero no se usa actualmente.
+
+## Sistema de Idiomas
+
+- **Fuente única**: `src/lib/languages.ts` exporta `languages[]`, `flags`, y `getLangName()`. Todos los componentes importan desde ahí.
+- **Idioma en navbar**: `NavbarClient` recibe `learningLanguage` desde `navbar.tsx` y muestra un badge junto al XP counter.
+- **`revalidatePath`**: La API `POST /api/onboarding/language` llama `revalidatePath("/")`, `revalidatePath("/learn")`, `revalidatePath("/profile")` para forzar refresco server-side sin depender de `router.refresh()` en cliente.
 
 ## Flujo de Onboarding
 

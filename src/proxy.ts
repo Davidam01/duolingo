@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 
-const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next", "/onboarding", "/api/onboarding"]
+const publicPaths = ["/", "/login", "/register", "/api/auth", "/_next", "/onboarding", "/api/onboarding", "/api"]
 
 export async function proxy(request: Request) {
   const { pathname } = new URL(request.url)
@@ -10,16 +11,16 @@ export async function proxy(request: Request) {
 
   const session = await auth()
   if (!session) {
-    return Response.redirect(new URL("/login", request.url))
+    return NextResponse.redirect(new URL("/login", request.url))
   }
 
-  if (session.user?.onboardingComplete === false) {
-    return Response.redirect(new URL("/onboarding/language", request.url))
+  if (session.user?.onboardingComplete !== true) {
+    return NextResponse.redirect(new URL("/onboarding/language", request.url))
   }
 
   return undefined
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|favicon.ico|.*\\.).*)"],
+  matcher: ["/((?!_next/static|favicon.ico|.*\\..*).*)"],
 }

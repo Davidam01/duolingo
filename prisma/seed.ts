@@ -8,6 +8,15 @@ const adapter = new PrismaBetterSqlite3({
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  // Clean up existing data in reverse FK order to prevent duplicates on reseed
+  await prisma.progress.deleteMany()
+  await prisma.userAchievement.deleteMany()
+  await prisma.exercise.deleteMany()
+  await prisma.lesson.deleteMany()
+  await prisma.section.deleteMany()
+  await prisma.achievement.deleteMany()
+  await prisma.course.deleteMany()
+
   const course = await prisma.course.create({
     data: {
       title: "Inglés",

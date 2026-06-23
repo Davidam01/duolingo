@@ -26,14 +26,51 @@ export default async function LessonPage({
 
   if (!lesson) redirect("/")
 
-  const exercises = lesson.exercises.map((ex) => ({
-    id: ex.id,
-    type: ex.type,
-    difficulty: ex.difficulty,
-    question: ex.question,
-    options: JSON.parse(ex.options ?? "[]") as string[],
-    answer: ex.answer,
-  }))
+  const exercises = lesson.exercises.map((ex) => {
+    let options: string[] = []
+    try {
+      options = JSON.parse(ex.options ?? "[]") as string[]
+    } catch {
+      options = []
+    }
+    return {
+      id: ex.id,
+      type: ex.type,
+      difficulty: ex.difficulty,
+      question: ex.question,
+      options,
+      answer: ex.answer,
+    }
+  })
+
+  if (exercises.length === 0) redirect("/learn")
+
+  // Check prerequisite: previous lesson in same section must be completed
+  const previousLesson = await prisma.lesson.findFirst({
+    where: {
+      sectionId: lesson.sectionId,
+      order: lesson.order - 1,
+    },
+    select: { id: true },
+  })
+
+  if (previousLesson) {
+    const previousExercises = await prisma.exercise.findMany({
+      where: { lessonId: previousLesson.id },
+      select: { id: true },
+    })
+    const previousIds = previousExercises.map((e) => e.id)
+
+    const completed = await prisma.progress.count({
+      where: {
+        userId: session.user.id,
+        exerciseId: { in: previousIds },
+        completed: true,
+      },
+    })
+
+    if (completed < previousIds.length) redirect("/learn")
+  }
 
   return (
     <div className="flex-1 flex flex-col bg-surface">
