@@ -29,6 +29,7 @@ export default async function LessonPage({
   const exercises = lesson.exercises.map((ex) => ({
     id: ex.id,
     type: ex.type,
+    difficulty: ex.difficulty,
     question: ex.question,
     options: JSON.parse(ex.options ?? "[]") as string[],
     answer: ex.answer,
@@ -36,7 +37,7 @@ export default async function LessonPage({
 
   return (
     <div className="flex-1 flex flex-col bg-surface">
-      <LessonClient exercises={exercises} />
+      <LessonClient exercises={exercises} lessonId={id} />
     </div>
   )
 }

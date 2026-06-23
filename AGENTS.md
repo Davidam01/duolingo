@@ -103,6 +103,7 @@ prisma/
 - **Navbar**: top bar en desktop, bottom tabs en móvil (🏠 Inicio / 🦉 Aprender / 🏆 Clasificación / 👤 Perfil / 🚪 Salir)
 - **ExerciseCard**: feedback inmediato ✅/❌ + respuesta correcta. Acierto → auto-avance 600ms. Error → botón "siguiente" manual.
 - **ExerciseCard — tipos**: `MULTIPLE_CHOICE` (opciones vertical), `TRANSLATION` (cursiva + label), `FILL_BLANK` (grid 2 col), `LISTENING` (botón play + TTS), `ORDERING` (chips de palabras arrastrables), `FREE_FORM` (input de texto + Enter).
+- **Dificultad**: Cada ejercicio tiene `difficulty` (`BEGINNER`/`INTERMEDIATE`/`ADVANCED`). Badge visible en ExerciseCard (★/★★/★★★). En /learn, cada lección muestra su rango de dificultad. XP multiplicado por factor de dificultad (×1, ×1.5, ×2).
 - **Comparación**: Normalizada con `toLowerCase().trim()` en `lesson-flow.tsx` para ORDERING y FREE_FORM.
 - **Logros**: galería en grid 2-columnas, desbloqueados a color, bloqueados en gris con candado
 

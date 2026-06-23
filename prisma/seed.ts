@@ -29,30 +29,35 @@ async function main() {
                     create: [
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo se dice 'Hola' en inglés?",
                         options: JSON.stringify(["Hello", "Goodbye", "Thanks", "Please"]),
                         answer: "Hello",
                       },
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo se dice 'Gracias' en inglés?",
                         options: JSON.stringify(["Hello", "Goodbye", "Thanks", "Please"]),
                         answer: "Thanks",
                       },
                       {
                         type: "TRANSLATION",
+                        difficulty: "INTERMEDIATE",
                         question: "Traduce: 'Good morning'",
                         options: JSON.stringify(["Buenos días", "Buenas noches", "Hola", "Adiós"]),
                         answer: "Buenos días",
                       },
                       {
                         type: "FILL_BLANK",
+                        difficulty: "INTERMEDIATE",
                         question: "Completa: '___ are you?'",
                         options: JSON.stringify(["How", "What", "Where", "Who"]),
                         answer: "How",
                       },
                       {
                         type: "LISTENING",
+                        difficulty: "BEGINNER",
                         question: "apple",
                         options: JSON.stringify(["manzana", "naranja", "plátano", "uva"]),
                         answer: "manzana",
@@ -67,24 +72,28 @@ async function main() {
                     create: [
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo se dice 'One' en español?",
                         options: JSON.stringify(["Uno", "Dos", "Tres", "Cinco"]),
                         answer: "Uno",
                       },
                       {
                         type: "TRANSLATION",
+                        difficulty: "INTERMEDIATE",
                         question: "Traduce: 'Three cats'",
                         options: JSON.stringify(["Tres gatos", "Dos gatos", "Cinco gatos", "Un gato"]),
                         answer: "Tres gatos",
                       },
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Qué número es 'Ten'?",
                         options: JSON.stringify(["10", "5", "20", "100"]),
                         answer: "10",
                       },
                       {
                         type: "FREE_FORM",
+                        difficulty: "ADVANCED",
                         question: "Escribe 'cinco' en inglés",
                         options: JSON.stringify([]),
                         answer: "five",
@@ -99,18 +108,21 @@ async function main() {
                     create: [
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo se dice 'Red' en español?",
                         options: JSON.stringify(["Rojo", "Azul", "Verde", "Amarillo"]),
                         answer: "Rojo",
                       },
                       {
                         type: "FILL_BLANK",
+                        difficulty: "INTERMEDIATE",
                         question: "Completa: 'The sky is ___' (azul)",
                         options: JSON.stringify(["blue", "red", "green", "yellow"]),
                         answer: "blue",
                       },
                       {
                         type: "TRANSLATION",
+                        difficulty: "ADVANCED",
                         question: "Traduce: 'Black cat'",
                         options: JSON.stringify(["Gato negro", "Gato blanco", "Perro negro", "Gato gris"]),
                         answer: "Gato negro",
@@ -133,6 +145,7 @@ async function main() {
                     create: [
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo pides un café en inglés?",
                         options: JSON.stringify([
                           "I'd like a coffee",
@@ -144,12 +157,14 @@ async function main() {
                       },
                       {
                         type: "TRANSLATION",
+                        difficulty: "INTERMEDIATE",
                         question: "Traduce: 'The bill, please'",
                         options: JSON.stringify(["La cuenta, por favor", "La mesa, por favor", "El menú, gracias", "Agua, por favor"]),
                         answer: "La cuenta, por favor",
                       },
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "INTERMEDIATE",
                         question: "¿Cómo dices 'Está delicioso'?",
                         options: JSON.stringify(["It's delicious", "It's horrible", "It's cold", "It's spicy"]),
                         answer: "It's delicious",
@@ -164,6 +179,7 @@ async function main() {
                     create: [
                       {
                         type: "MULTIPLE_CHOICE",
+                        difficulty: "BEGINNER",
                         question: "¿Cómo preguntas por una dirección?",
                         options: JSON.stringify([
                           "Where is the station?",
@@ -175,15 +191,54 @@ async function main() {
                       },
                       {
                         type: "FILL_BLANK",
+                        difficulty: "INTERMEDIATE",
                         question: "Completa: 'Turn ___ at the corner' (izquierda)",
                         options: JSON.stringify(["left", "right", "straight", "back"]),
                         answer: "left",
                       },
                       {
                         type: "ORDERING",
+                        difficulty: "ADVANCED",
                         question: "Ordena: '¿Dónde está la estación?'",
                         options: JSON.stringify(["is", "the", "station", "Where"]),
                         answer: "Where is the station",
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            title: "Desafíos",
+            order: 3,
+            lessons: {
+              create: [
+                {
+                  title: "Práctica avanzada",
+                  order: 1,
+                  exercises: {
+                    create: [
+                      {
+                        type: "FREE_FORM",
+                        difficulty: "ADVANCED",
+                        question: "Escribe 'buenos días' en inglés",
+                        options: JSON.stringify([]),
+                        answer: "good morning",
+                      },
+                      {
+                        type: "ORDERING",
+                        difficulty: "INTERMEDIATE",
+                        question: "Ordena: 'Me gusta el café'",
+                        options: JSON.stringify(["coffee", "like", "I"]),
+                        answer: "I like coffee",
+                      },
+                      {
+                        type: "LISTENING",
+                        difficulty: "INTERMEDIATE",
+                        question: "Good morning",
+                        options: JSON.stringify(["Buenos días", "Buenas tardes", "Buenas noches", "Hola"]),
+                        answer: "Buenos días",
                       },
                     ],
                   },

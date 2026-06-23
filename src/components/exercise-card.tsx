@@ -4,10 +4,17 @@ import { useState, useCallback } from "react"
 
 interface ExerciseCardProps {
   type: string
+  difficulty?: string
   question: string
   options: string[]
   answer: string
   onAnswer: (answer: string) => void
+}
+
+const difficultyConfig: Record<string, { label: string, icon: string, className: string }> = {
+  BEGINNER: { label: "principiante", icon: "★", className: "text-success" },
+  INTERMEDIATE: { label: "intermedio", icon: "★★", className: "text-accent" },
+  ADVANCED: { label: "avanzado", icon: "★★★", className: "text-error" },
 }
 
 function playAudio(text: string) {
@@ -23,7 +30,7 @@ function playAudio(text: string) {
   }
 }
 
-export function ExerciseCard({ type, question, options, answer: correctAnswer, onAnswer }: ExerciseCardProps) {
+export function ExerciseCard({ type, difficulty, question, options, answer: correctAnswer, onAnswer }: ExerciseCardProps) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
   const [correct, setCorrect] = useState<boolean | null>(null)
@@ -103,8 +110,20 @@ export function ExerciseCard({ type, question, options, answer: correctAnswer, o
     return selected !== null
   }
 
+  const diff = difficulty ? difficultyConfig[difficulty] : null
+
   return (
     <div className="space-y-6 animate-fade-in-up">
+      {/* Difficulty badge */}
+      {diff && (
+        <div className="flex justify-center">
+          <span className={`inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider ${diff.className}`}>
+            <span>{diff.icon}</span>
+            {diff.label}
+          </span>
+        </div>
+      )}
+
       {/* Type labels */}
       {isTranslation && (
         <p className="text-sm text-text-muted text-center uppercase tracking-wider font-bold">
