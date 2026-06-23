@@ -26,7 +26,7 @@ export function LessonFlow({ exercises, onComplete }: LessonFlowProps) {
 
   const handleAnswer = useCallback(
     async (userAnswer: string) => {
-      const correct = userAnswer === exercise.answer
+      const correct = userAnswer.toLowerCase().trim() === exercise.answer.toLowerCase().trim()
       const newCorrect = correct ? correctCount + 1 : correctCount
       setCorrectCount(newCorrect)
 

@@ -12,6 +12,8 @@ enum ExerciseType {
   FILL_BLANK
   LISTENING
   SPEAKING
+  FREE_FORM
+  ORDERING
 }
 
 enum AchievementType {

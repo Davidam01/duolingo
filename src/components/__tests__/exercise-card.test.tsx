@@ -151,4 +151,182 @@ describe("ExerciseCard", () => {
     expect(questionEl).toBeInTheDocument()
     expect(questionEl).toHaveTextContent("¿Cómo se dice 'Hola' en inglés?")
   })
+
+  // --- LISTENING ---
+
+  it("LISTENING: muestra el botón de play y las opciones", () => {
+    render(
+      <ExerciseCard type="LISTENING" question="apple" options={["manzana", "naranja"]} answer="manzana" onAnswer={jest.fn()} />,
+    )
+
+    expect(screen.getByLabelText("Escuchar pronunciación")).toBeInTheDocument()
+    expect(screen.getByText("escucha y responde")).toBeInTheDocument()
+    expect(screen.getByText("manzana")).toBeInTheDocument()
+    expect(screen.getByText("naranja")).toBeInTheDocument()
+  })
+
+  it("LISTENING: deshabilita el botón de play al hacer clic", () => {
+    render(
+      <ExerciseCard type="LISTENING" question="apple" options={["manzana", "naranja"]} answer="manzana" onAnswer={jest.fn()} />,
+    )
+
+    const playBtn = screen.getByLabelText("Escuchar pronunciación")
+    fireEvent.click(playBtn)
+    expect(playBtn).toBeDisabled()
+  })
+
+  // --- ORDERING ---
+
+  it("ORDERING: muestra el label y las palabras disponibles", () => {
+    render(
+      <ExerciseCard
+        type="ORDERING"
+        question="Ordena las palabras"
+        options={['["Where","is","the","station"]']}
+        answer="Where is the station"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    expect(screen.getByText("ordena las palabras")).toBeInTheDocument()
+    expect(screen.getByText("Where")).toBeInTheDocument()
+    expect(screen.getByText("is")).toBeInTheDocument()
+    expect(screen.getByText("the")).toBeInTheDocument()
+    expect(screen.getByText("station")).toBeInTheDocument()
+  })
+
+  it("ORDERING: permite construir y modificar la frase", () => {
+    render(
+      <ExerciseCard
+        type="ORDERING"
+        question="Ordena"
+        options={['["I","go","home"]']}
+        answer="I go home"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    // Click words to build sentence
+    fireEvent.click(screen.getByText("I"))
+    fireEvent.click(screen.getByText("home"))
+    fireEvent.click(screen.getByText("go"))
+
+    // Confirm button should be enabled
+    const confirmBtn = screen.getByText("confirmar")
+    expect(confirmBtn).not.toBeDisabled()
+
+    // Click a word in sentence to remove it
+    fireEvent.click(screen.getByText("go"))
+
+    // go should be back in available pool
+    expect(screen.getByText("go")).toBeInTheDocument()
+  })
+
+  it("ORDERING: deshabilita botón de confirmar con frase vacía", () => {
+    render(
+      <ExerciseCard
+        type="ORDERING"
+        question="Ordena"
+        options={['["I","go","home"]']}
+        answer="I go home"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    const confirmBtn = screen.getByText("confirmar")
+    expect(confirmBtn).toBeDisabled()
+  })
+
+  // --- FREE_FORM ---
+
+  it("FREE_FORM: muestra input de texto y permite escribir", () => {
+    render(
+      <ExerciseCard
+        type="FREE_FORM"
+        question="Escribe"
+        options={[]}
+        answer="hello"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    const input = screen.getByPlaceholderText("escribe tu respuesta...")
+    expect(input).toBeInTheDocument()
+    fireEvent.change(input, { target: { value: "hello" } })
+    expect(input).toHaveValue("hello")
+  })
+
+  it("FREE_FORM: deshabilita confirmar con input vacío", () => {
+    render(
+      <ExerciseCard
+        type="FREE_FORM"
+        question="Escribe"
+        options={[]}
+        answer="hello"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    const confirmBtn = screen.getByText("confirmar")
+    expect(confirmBtn).toBeDisabled()
+  })
+
+  it("FREE_FORM: habilita confirmar al escribir", () => {
+    render(
+      <ExerciseCard
+        type="FREE_FORM"
+        question="Escribe"
+        options={[]}
+        answer="hello"
+        onAnswer={jest.fn()}
+      />,
+    )
+
+    const input = screen.getByPlaceholderText("escribe tu respuesta...")
+    fireEvent.change(input, { target: { value: "hello" } })
+    const confirmBtn = screen.getByText("confirmar")
+    expect(confirmBtn).not.toBeDisabled()
+  })
+
+  it("FREE_FORM: submit con Enter", () => {
+    const onAnswer = jest.fn()
+    render(
+      <ExerciseCard
+        type="FREE_FORM"
+        question="Escribe"
+        options={[]}
+        answer="hello"
+        onAnswer={onAnswer}
+      />,
+    )
+
+    const input = screen.getByPlaceholderText("escribe tu respuesta...")
+    fireEvent.change(input, { target: { value: "hello" } })
+    fireEvent.keyDown(input, { key: "Enter" })
+    act(() => {
+      jest.advanceTimersByTime(600)
+    })
+    expect(onAnswer).toHaveBeenCalledWith("hello")
+  })
+
+  it("FREE_FORM: muestra feedback correcto/incorrecto", () => {
+    const onAnswer = jest.fn()
+    render(
+      <ExerciseCard
+        type="FREE_FORM"
+        question="Escribe"
+        options={[]}
+        answer="hello"
+        onAnswer={onAnswer}
+      />,
+    )
+
+    const input = screen.getByPlaceholderText("escribe tu respuesta...")
+    fireEvent.change(input, { target: { value: "hola" } })
+    fireEvent.click(screen.getByText("confirmar"))
+
+    expect(screen.getByText(/incorrecto/)).toBeInTheDocument()
+    expect(screen.getByText(/hello/)).toBeInTheDocument() // Shows correct answer
+    expect(screen.getByText(/hola/)).toBeInTheDocument() // Shows user's answer
+  })
 })
