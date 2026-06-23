@@ -21,7 +21,7 @@ export default async function LearnPage() {
           lessons: {
             orderBy: { order: "asc" },
             include: {
-              exercises: { select: { id: true } },
+              exercises: { select: { id: true, difficulty: true } },
             },
           },
         },
@@ -79,6 +79,14 @@ export default async function LearnPage() {
                       {section.lessons.map((lesson, idx) => {
                         const allDone = lesson.exercises.every((e) => completedSet.has(e.id))
                         const started = lesson.exercises.some((e) => completedSet.has(e.id))
+
+                        const difficultyOrder: Record<string, number> = { BEGINNER: 1, INTERMEDIATE: 2, ADVANCED: 3 }
+                        const diffs = lesson.exercises.map((e) => difficultyOrder[e.difficulty] ?? 1)
+                        const minDiff = Math.min(...diffs)
+                        const maxDiff = Math.max(...diffs)
+                        const diffLabel = minDiff === maxDiff
+                          ? ["", "★ principiante", "★★ intermedio", "★★★ avanzado"][minDiff]
+                          : `★→★★★`
                         const isFirstIncomplete = !allDone && !started && (idx === 0 || section.lessons.slice(0, idx).every((l) =>
                           l.exercises.every((e) => completedSet.has(e.id)),
                         ))
@@ -123,9 +131,18 @@ export default async function LearnPage() {
                               <p className={`font-bold transition-colors ${allDone ? "text-accent" : isActive || isFirstIncomplete ? "text-text" : "text-text-muted"}`}>
                                 {lesson.title}
                               </p>
-                              <p className="text-xs text-text-muted">
-                                {lesson.exercises.length} ejercicios
-                              </p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <p className="text-xs text-text-muted">
+                                  {lesson.exercises.length} ejercicios
+                                </p>
+                                <span className={`text-[10px] font-semibold ${
+                                  diffs.every((d) => d === 1) ? "text-success" :
+                                  diffs.every((d) => d === 3) ? "text-error" :
+                                  "text-accent"
+                                }`}>
+                                  {diffLabel}
+                                </span>
+                              </div>
                             </div>
                           </Link>
                         )

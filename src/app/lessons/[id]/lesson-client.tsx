@@ -13,8 +13,10 @@ type AchievementUnlock = {
 
 export function LessonClient({
   exercises,
+  lessonId,
 }: {
   exercises: ExerciseData[]
+  lessonId: string
 }) {
   const router = useRouter()
   const [notification, setNotification] = useState<AchievementUnlock | null>(null)
@@ -23,7 +25,7 @@ export function LessonClient({
     const res = await fetch("/api/lessons/complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ correct, total }),
+      body: JSON.stringify({ correct, total, lessonId }),
     })
     const data = await res.json()
     if (data.unlocked?.length > 0) {
@@ -31,7 +33,7 @@ export function LessonClient({
     } else {
       router.push("/learn")
     }
-  }, [router])
+  }, [router, lessonId])
 
   function handleNotificationClose() {
     setNotification(null)

@@ -11,9 +11,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { correct, total } = await request.json()
+    const { correct, total, lessonId } = await request.json()
 
-    const xpEarned = Math.round((correct / total) * 100)
+    // Calculate difficulty multiplier from lesson exercises
+    const diffMultiplier: Record<string, number> = { BEGINNER: 1, INTERMEDIATE: 1.5, ADVANCED: 2 }
+    const exercises = lessonId
+      ? await prisma.exercise.findMany({ where: { lessonId }, select: { difficulty: true } })
+      : []
+    const avgMultiplier = exercises.length > 0
+      ? exercises.reduce((sum, e) => sum + (diffMultiplier[e.difficulty] ?? 1), 0) / exercises.length
+      : 1
+
+    const xpEarned = Math.round((correct / total) * 100 * avgMultiplier)
     const allCorrect = correct === total
     const now = new Date()
 

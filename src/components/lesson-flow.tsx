@@ -6,6 +6,7 @@ import { ExerciseCard } from "./exercise-card"
 export type ExerciseData = {
   id: string
   type: string
+  difficulty: string
   question: string
   options: string[]
   answer: string
@@ -138,6 +139,7 @@ export function LessonFlow({ exercises, onComplete }: LessonFlowProps) {
       <ExerciseCard
         key={exercise.id}
         type={exercise.type}
+        difficulty={exercise.difficulty}
         question={exercise.question}
         options={exercise.options}
         answer={exercise.answer}

@@ -6,6 +6,12 @@ datasource db {
   provider = "sqlite"
 }
 
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 enum ExerciseType {
   TRANSLATION
   MULTIPLE_CHOICE
@@ -134,6 +140,7 @@ model Lesson {
 model Exercise {
   id          String       @id @default(cuid())
   type        ExerciseType
+  difficulty  Difficulty   @default(BEGINNER)
   question    String
   options     String?
   answer      String
