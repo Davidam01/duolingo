@@ -21,14 +21,14 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
 
   if (!session) {
     return (
-      <nav className="sticky top-0 z-50 bg-white border-b border-border-light shadow-sm" aria-label="Navegación principal">
+      <nav className="sticky top-0 z-50 bg-white border-b border-border shadow-sm" aria-label="Navegación principal">
         <div className="max-w-5xl mx-auto flex items-center justify-between h-14 px-4">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold font-display text-primary hover:text-primary-hover transition-colors">
             <span aria-hidden>🦉</span>
             <span className="hidden sm:inline">duolingo</span>
           </Link>
           <div className="flex items-center gap-2 text-sm font-medium">
-            <Link href="/login" className="px-4 py-2 text-text-muted hover:text-text transition-colors rounded-xl hover:bg-surface-alt">
+            <Link href="/login" className="px-4 py-2 text-text-muted hover:text-text transition-colors rounded-xl hover:bg-border/30">
               iniciar sesión
             </Link>
             <Link href="/register" className="duo-btn duo-btn-primary text-sm px-5 py-2 uppercase tracking-wide">
@@ -45,7 +45,7 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
   return (
     <>
       {/* Desktop Nav */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-border-light shadow-sm hidden md:block" aria-label="Navegación principal">
+      <nav className="sticky top-0 z-50 bg-white border-b border-border shadow-sm hidden md:block" aria-label="Navegación principal">
         <div className="max-w-5xl mx-auto flex items-center justify-between h-14 px-4">
           {/* Logo */}
           <Link href="/learn" className="flex items-center gap-2 text-xl font-bold font-display text-primary hover:text-primary-hover transition-all hover:scale-105 active:scale-95">
@@ -64,7 +64,7 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
                   className={`relative px-3 py-2 rounded-xl transition-all duration-200 ${
                     active
                       ? "text-primary font-bold"
-                      : "text-text-muted hover:text-text hover:bg-surface-alt"
+                      : "text-text-muted hover:text-text hover:bg-border/30"
                   }`}
                 >
                   {label}
@@ -77,10 +77,10 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
             })}
 
             {/* XP Counter */}
-            <span className="flex items-center gap-1.5 text-accent font-bold text-sm bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/20 px-3 py-1.5 rounded-full ml-2 group transition-all duration-200">
-              <span className="group-hover:scale-110 transition-transform duration-200" aria-hidden>✨</span>
-              <span key={xp} className="tabular-nums animate-count-up">{xp}</span>
-              <span className="text-accent/60">XP</span>
+            <span className="flex items-center gap-1 text-accent font-semibold text-sm ml-3" title={`${xp} XP`}>
+              <span aria-hidden>✨</span>
+              <span>{xp}</span>
+              <span className="text-text-muted text-xs">XP</span>
             </span>
 
             <button
@@ -95,7 +95,7 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border-light shadow-[0_-2px_8px_rgba(0,0,0,0.06)] md:hidden" aria-label="Navegación inferior">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border shadow-[0_-2px_8px_rgba(0,0,0,0.06)] md:hidden" aria-label="Navegación inferior">
         <div className="flex items-center justify-around h-16 px-2">
           {links.map(({ href, label, icon }) => {
             const active = isActive(href)

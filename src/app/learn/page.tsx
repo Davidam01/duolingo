@@ -37,7 +37,7 @@ export default async function LearnPage() {
   const completedSet = new Set(completedExercises.map((p) => p.exerciseId))
 
   return (
-    <div className="flex-1 flex flex-col bg-background">
+    <div className="flex-1 flex flex-col bg-surface">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
         {courses.map((course) => (
           <div key={course.id}>

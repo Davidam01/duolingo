@@ -83,7 +83,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             placeholder="Tu nombre"
             autoComplete="name"
             required
@@ -99,7 +99,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+          onChange={(e) => setEmail(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder="correo@ejemplo.com"
           autoComplete="email"
           required
@@ -114,7 +114,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-light focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+          onChange={(e) => setPassword(e.target.value)}            className="w-full px-4 py-3.5 rounded-2xl border-2 border-border bg-surface text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           placeholder="••••••••"
           minLength={6}
           autoComplete={mode === "register" ? "new-password" : "current-password"}
