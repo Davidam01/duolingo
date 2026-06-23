@@ -39,7 +39,7 @@ export default async function ProfilePage() {
   const unlockedIds = new Set(user.achievements.map((ua) => ua.achievementId))
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-white to-background">
+    <div className="flex-1 flex flex-col bg-background">
       <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
         {/* Avatar y nombre */}
         <div className="text-center space-y-4 animate-fade-in-up">

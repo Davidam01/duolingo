@@ -88,8 +88,10 @@ prisma/
 | `yellow` | `#FFC800` | Amarillo — celebraciones XP |
 | `text` | `#3C3C3C` | Casi negro — texto principal |
 | `text-muted` | `#777777` | Gris — texto secundario |
-| `surface` | `#FFFFFF` | Blanco — fondos de tarjeta |
-| `border` | `#E5E5E5` | Gris claro — bordes |
+| `background` | `#F5F5F5` | Fondo general de la app |
+| `surface` | `#FFFFFF` | Blanco — fondos de tarjeta y navbar |
+| `border` | `#E5E5E5` | Gris claro — bordes de cards |
+| `border-light` | `#EFEFEF` | Gris muy claro — bordes de navbar, divisores |
 
 ### Tipografía
 - **Display**: Fredoka (Google Font) — lowercase, bold para títulos

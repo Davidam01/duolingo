@@ -8,9 +8,8 @@ export default async function HomePage() {
 
   if (!session?.user?.id) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-background via-white to-background">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 bg-background">
         <div className="max-w-sm w-full text-center space-y-10">
-          {/* Hero */}
           <div className="space-y-6">
             <div className="text-7xl animate-bounce-in">🦉</div>
             <h1 className="text-4xl font-bold font-display text-text leading-tight">
@@ -22,7 +21,6 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-3 gap-3">
             {[
               { value: "10M+", label: "estudiantes" },
@@ -31,7 +29,7 @@ export default async function HomePage() {
             ].map((stat, i) => (
               <div
                 key={stat.label}
-                className="bg-white rounded-2xl border-2 border-border-light p-3 shadow-sm animate-slide-up"
+                className="bg-surface rounded-2xl border border-border p-3 animate-fade-in-up"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <p className="text-xl font-bold font-display text-primary">
@@ -44,7 +42,6 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* CTAs */}
           <div className="space-y-3">
             <Link
               href="/register"
@@ -86,48 +83,48 @@ export default async function HomePage() {
   const accuracy = totalExercises > 0 ? Math.round((correctExercises / totalExercises) * 100) : 0
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-primary/[0.02] to-background">
-      <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-8">
+    <div className="flex-1 flex flex-col bg-background">
+      <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-6">
         {/* Greeting */}
-        <div className="text-center space-y-2 animate-fade-in-up">
+        <div className="text-center space-y-3 animate-fade-in-up">
           <div className="relative inline-flex">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center text-4xl font-bold mx-auto border-2 border-primary/20 shadow-lg">
+            <div className="w-16 h-16 rounded-full bg-surface text-primary flex items-center justify-center text-2xl font-bold mx-auto border-2 border-primary/20">
               {user.name?.charAt(0).toUpperCase() ?? "?"}
             </div>
             {user.streak > 0 && (
-              <div className="absolute -bottom-1 -right-1 text-lg animate-streak-fire">
+              <div className="absolute -bottom-1 -right-1 text-base animate-streak-fire">
                 🔥
               </div>
             )}
           </div>
-          <h1 className="text-2xl font-bold font-display text-text">
+          <h1 className="text-xl font-bold font-display text-text">
             ¡hola, {user.name ?? "estudiante"}!
           </h1>
-          <p className="text-sm text-text-muted">
-            {user.learningLanguage
-              ? `sigues aprendiendo ${getLangName(user.learningLanguage)}`
-              : "elige un idioma para empezar"}
-          </p>
+          {user.learningLanguage && (
+            <p className="text-sm text-text-muted">
+              sigues aprendiendo {getLangName(user.learningLanguage)}
+            </p>
+          )}
         </div>
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 gap-3 animate-fade-in-up">
-          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1">
             <span className="text-lg">✨</span>
-            <p className="text-xl font-bold text-accent animate-count-up">{user.xp}</p>
+            <p className="text-xl font-bold text-accent">{user.xp}</p>
             <p className="text-xs text-text-muted uppercase tracking-wider">xp total</p>
           </div>
-          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1">
             <span className={`text-lg ${user.streak > 0 ? "animate-streak-fire" : ""}`}>🔥</span>
             <p className={`text-xl font-bold ${user.streak > 0 ? "text-secondary" : "text-text-muted"}`}>{user.streak} días</p>
             <p className="text-xs text-text-muted uppercase tracking-wider">racha</p>
           </div>
-          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1">
             <span className="text-lg">📝</span>
             <p className="text-xl font-bold text-text">{user.lessonsCompleted}</p>
             <p className="text-xs text-text-muted uppercase tracking-wider">lecciones</p>
           </div>
-          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+          <div className="p-4 rounded-2xl border border-border bg-surface text-center space-y-1">
             <span className="text-lg">🎯</span>
             <p className={`text-xl font-bold ${accuracy >= 80 ? "text-success" : accuracy >= 50 ? "text-accent" : "text-text"}`}>{accuracy}%</p>
             <p className="text-xs text-text-muted uppercase tracking-wider">precisión</p>
@@ -137,34 +134,10 @@ export default async function HomePage() {
         {/* Continue learning CTA */}
         <Link
           href="/learn"
-          className="block w-full py-4 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-2xl text-lg text-center transition-all shadow-[0_4px_0_#58A700] hover:shadow-[0_2px_0_#58A700] hover:translate-y-[2px] active:translate-y-[3px] uppercase tracking-wide animate-fade-in-up"
+          className="duo-btn duo-btn-primary w-full text-base uppercase tracking-wide animate-fade-in-up"
         >
           continuar aprendiendo
         </Link>
-
-        {/* Quick links */}
-        <div className="grid grid-cols-2 gap-3 animate-fade-in-up">
-          <Link
-            href="/leaderboard"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-surface hover:border-primary/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 group"
-          >
-            <span className="text-xl group-hover:scale-110 transition-transform">🏆</span>
-            <div>
-              <p className="font-bold text-sm text-text">Clasificación</p>
-              <p className="text-xs text-text-muted">compite con otros</p>
-            </div>
-          </Link>
-          <Link
-            href="/profile"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-border bg-surface hover:border-primary/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 group"
-          >
-            <span className="text-xl group-hover:scale-110 transition-transform">👤</span>
-            <div>
-              <p className="font-bold text-sm text-text">Perfil</p>
-              <p className="text-xs text-text-muted">tus logros</p>
-            </div>
-          </Link>
-        </div>
 
         {/* Recent achievements */}
         {user.achievements.length > 0 && (
@@ -176,11 +149,10 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {user.achievements.map((ua, i) => (
+              {user.achievements.map((ua) => (
                 <div
                   key={ua.id}
-                  className="flex items-center gap-2 p-3 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/[0.03] to-transparent hover:shadow-md transition-all duration-300 animate-slide-up"
-                  style={{ animationDelay: `${i * 80}ms` }}
+                  className="flex items-center gap-2 p-3 rounded-2xl border border-border bg-surface"
                 >
                   <span className="text-xl">{ua.achievement.icon}</span>
                   <div className="min-w-0">
