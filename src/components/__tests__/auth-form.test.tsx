@@ -164,7 +164,7 @@ describe("AuthForm - Login mode", () => {
 
     fireEvent.click(screen.getByText("Google"))
 
-    expect(signIn).toHaveBeenCalledWith("google", { callbackUrl: "/learn" })
+    expect(signIn).toHaveBeenCalledWith("google", { callbackUrl: "/" })
   })
 
   it("muestra error si hay un error en searchParams", () => {

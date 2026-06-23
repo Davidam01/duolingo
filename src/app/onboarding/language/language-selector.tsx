@@ -31,7 +31,7 @@ export function LanguageSelector({ courses }: { courses: CourseItem[] }) {
       if (!res.ok) {
         throw new Error("Error al guardar idioma")
       }
-      router.push("/learn")
+      router.push("/")
     } catch {
       setError("Error al guardar. Intenta de nuevo.")
       setSaving(false)

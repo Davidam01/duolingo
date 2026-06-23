@@ -57,6 +57,9 @@ describe("NavbarClient - Con sesion", () => {
     render(<NavbarClient session={session} xp={100} />)
 
     // Both desktop and mobile render these - getAllByText returns both
+    const homeLinks = screen.getAllByText("Inicio")
+    expect(homeLinks.length).toBeGreaterThanOrEqual(1)
+
     const learnLinks = screen.getAllByText("Aprender")
     expect(learnLinks.length).toBeGreaterThanOrEqual(1)
 
@@ -92,12 +95,12 @@ describe("NavbarClient - Con sesion", () => {
   })
 
   it("marca el enlace activo segun la ruta actual", () => {
-    currentPathname = "/learn"
+    currentPathname = "/"
     render(<NavbarClient session={session} xp={0} />)
 
-    // Get all "Aprender" links - the desktop one (first) should be bold
-    const learnLinks = screen.getAllByText("Aprender")
-    const activeDesktopLink = learnLinks[0] // Desktop nav renders first
+    // Get all "Inicio" links - the desktop one (first) should be bold
+    const homeLinks = screen.getAllByText("Inicio")
+    const activeDesktopLink = homeLinks[0] // Desktop nav renders first
     expect(activeDesktopLink.className).toContain("font-bold")
   })
 })

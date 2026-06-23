@@ -64,7 +64,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       }
 
       // Use full page navigation to ensure session cookie is properly sent
-      window.location.href = "/learn"
+      window.location.href = "/"
     } catch {
       setError("Error de conexión. Verifica que la base de datos esté funcionando.")
       setLoading(false)
@@ -161,7 +161,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
           <button
             type="button"
-            onClick={() => signIn("google", { callbackUrl: "/learn" })}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
             className="duo-btn duo-btn-secondary w-full gap-3"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
