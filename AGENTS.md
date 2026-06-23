@@ -37,6 +37,7 @@ src/
 │   ├── navbar.tsx              # Server component (carga sesión)
 │   ├── navbar-client.tsx       # Nav responsive: top desktop, bottom tabs mobile
 │   ├── lesson-flow.tsx         # Flujo de ejercicios con progreso
+│   ├── achievement-notification.tsx # Overlay de logro desbloqueado + sonido
 │   └── exercise-card.tsx       # Componente único de ejercicio (3 tipos)
 ├── __tests__/
 │   └── api/
@@ -100,7 +101,7 @@ prisma/
 - **Botones 3D**: sombra inferior que se reduce en hover/active (efecto físico)
 - **Ruta de aprendizaje**: scroll vertical con nodos conectados por línea. Nodo activo pulsa, completado es dorado, bloqueado es gris
 - **Navbar**: top bar en desktop, bottom tabs en móvil (🏠 Inicio / 🦉 Aprender / 🏆 Clasificación / 👤 Perfil / 🚪 Salir)
-- **ExerciseCard**: feedback inmediato ✅/❌ + respuesta correcta, delay 600ms antes de avanzar
+- **ExerciseCard**: feedback inmediato ✅/❌ + respuesta correcta. Acierto → auto-avance 600ms. Error → botón "siguiente" manual.
 - **Logros**: galería en grid 2-columnas, desbloqueados a color, bloqueados en gris con candado
 
 ### Animaciones
@@ -110,6 +111,7 @@ prisma/
 | `scale-in` | 0.3s | Pantalla de resultado |
 | `bounce-in` | 0.5s | Íconos de celebración (solo landing) |
 | `streak-fire` | 2s | Pulso de racha (infinite, solo dashboard) |
+| `slide-up` | 0.3s | Feedback de acierto/error en ExerciseCard |
 
 ## Tests
 
@@ -136,7 +138,7 @@ Usan una base de datos SQLite real (`test.db`) que se crea y destruye automátic
 | Ruta | Tests | Cobertura |
 |------|-------|-----------|
 | `GET /api/lessons` | 4 | 401 sin auth, orden ASC, count exercises, section/course info |
-| `POST /api/lessons/complete` | 6 | 401, XP 100%, XP parcial, streak, achievements async, 500 invalid body |
+| `POST /api/lessons/complete` | 6 | 401, XP 100%, XP parcial, streak, achievements sincronos, 500 invalid body |
 | `GET /api/progress` | 3 | 401, empty array, entries con exercise info |
 | `POST /api/progress` | 4 | 401, 400 sin exerciseId, create 201, no duplicate (200) |
 | `POST /api/achievements` | 5 | 401, unlock thresholds, no re-unlock, details, empty |
@@ -150,9 +152,9 @@ para crear `test.db` con el esquema. Se limpia al finalizar (`afterAll`).
 **Aislamiento**: `beforeEach` resetea las stats del usuario de test (xp, streak, lessonsCompleted,
 perfectLessons) y limpia progress/achievements para evitar contaminación entre tests.
 
-**Achievements asíncronos**: `verifyAchievements` se dispara con `.catch()` (fire-and-forget)
-desde `POST /api/lessons/complete`. Los tests usan polling (20 intentos × 100ms) en vez de
-setTimeout fijo para esperar a que se complete.
+**Achievements sincronos**: `verifyAchievements` se ejecuta con `await` dentro de
+`POST /api/lessons/complete` y los logros desbloqueados se devuelven en la respuesta.
+Los tests verifican `unlocked` directamente en el body del response.
 
 **`test.db`** está en `.gitignore`. Si un test falla y no se limpia, borrar manualmente:
 ```bash
@@ -189,7 +191,7 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 - **Sistema de XP**: Solo `POST /api/lessons/complete` otorga XP. `POST /api/progress` solo guarda progreso individual (sin XP) para evitar doble acumulación.
 - **Rachas (streak)**: Se actualizan en `POST /api/lessons/complete`. Si la última actividad fue el día anterior → streak +1. Si fue hoy → se mantiene. Si hubo un gap >1 día → se reinicia a 1.
 - **Lecciones completadas**: `user.lessonsCompleted` se incrementa en cada llamada exitosa a `/api/lessons/complete`. `user.perfectLessons` se incrementa solo si `correct === total`.
-- **Verificación de logros**: Se llama a `POST /api/achievements` desde `POST /api/lessons/complete` mediante fetch interno (try/catch, no crítico). Los logros usan `user.lessonsCompleted` (no cuentan ejercicios).
+- **Verificación de logros**: `verifyAchievements` se ejecuta con `await` dentro de `POST /api/lessons/complete`. Los logros desbloqueados se devuelven en el response (`{ xp, unlocked }`). El cliente (`lesson-client.tsx`) muestra una notificación con sonido vía `AchievementNotification`.
 - **Leaderboard**: Es global (XP total), no semanal. El modelo `Leaderboard` con `weekStart`/`weekEnd` existe pero no se usa actualmente.
 
 ## Flujo de Onboarding

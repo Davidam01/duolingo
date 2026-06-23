@@ -122,6 +122,10 @@ describe("LessonFlow", () => {
     fireEvent.click(screen.getByText("C"))
     fireEvent.click(screen.getByText("confirmar"))
     await act(async () => {
+      jest.advanceTimersByTime(100)
+    })
+    fireEvent.click(screen.getByText("siguiente →"))
+    await act(async () => {
       jest.advanceTimersByTime(600)
     })
 
@@ -169,10 +173,15 @@ describe("LessonFlow", () => {
       // First 3 correct, last 2 wrong
       if (i < 3) {
         fireEvent.click(screen.getByText("A"))
+        fireEvent.click(screen.getByText("confirmar"))
       } else {
         fireEvent.click(screen.getByText("B"))
+        fireEvent.click(screen.getByText("confirmar"))
+        await act(async () => {
+          jest.advanceTimersByTime(100)
+        })
+        fireEvent.click(screen.getByText("siguiente →"))
       }
-      fireEvent.click(screen.getByText("confirmar"))
 
       await act(async () => {
         jest.advanceTimersByTime(600)
@@ -221,6 +230,10 @@ describe("LessonFlow", () => {
 
     fireEvent.click(screen.getByText("B")) // Wrong answer
     fireEvent.click(screen.getByText("confirmar"))
+    await act(async () => {
+      jest.advanceTimersByTime(100)
+    })
+    fireEvent.click(screen.getByText("siguiente →"))
 
     await act(async () => {
       jest.advanceTimersByTime(600)

@@ -20,8 +20,15 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
     setAnswered(true)
     const isCorrect = selected === answer
     setCorrect(isCorrect)
-    setTimeout(() => onAnswer(selected), 600)
+    if (isCorrect) {
+      setTimeout(() => onAnswer(selected), 600)
+    }
   }, [selected, answered, answer, onAnswer])
+
+  const handleNext = useCallback(() => {
+    if (selected === null) return
+    onAnswer(selected)
+  }, [selected, onAnswer])
 
   const isTranslation = type === "TRANSLATION"
   const isFillBlank = type === "FILL_BLANK"
@@ -97,11 +104,11 @@ export function ExerciseCard({ type, question, options, answer, onAnswer }: Exer
       {/* Botón de confirmar/continuar */}
       <div className="pt-2">
         <button
-          onClick={handleConfirm}
-          disabled={!selected || answered}
+          onClick={answered && correct === false ? handleNext : handleConfirm}
+          disabled={!selected || (answered && correct !== false)}
           className="duo-btn duo-btn-primary w-full text-lg uppercase tracking-wide"
         >
-          {answered ? "siguiente →" : "confirmar"}
+          {answered && correct === false ? "siguiente →" : answered ? "siguiente →" : "confirmar"}
         </button>
       </div>
     </div>
