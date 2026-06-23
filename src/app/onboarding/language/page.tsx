@@ -3,23 +3,11 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { LanguageSelector } from "./language-selector"
+import { flags } from "@/lib/languages"
 
 export const metadata: Metadata = {
   title: "¿Qué quieres aprender?",
   description: "Elige el idioma que quieres aprender",
-}
-
-const flags: Record<string, string> = {
-  en: "🇬🇧",
-  fr: "🇫🇷",
-  de: "🇩🇪",
-  it: "🇮🇹",
-  pt: "🇵🇹",
-  ja: "🇯🇵",
-  ko: "🇰🇷",
-  zh: "🇨🇳",
-  ru: "🇷🇺",
-  ar: "🇸🇦",
 }
 
 export default async function OnboardingLanguagePage() {

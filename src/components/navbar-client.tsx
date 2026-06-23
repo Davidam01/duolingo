@@ -3,10 +3,12 @@
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { signOut } from "next-auth/react"
+import { getLangName } from "@/lib/languages"
 
 interface NavbarClientProps {
   session: { user?: { id?: string; name?: string | null; email?: string | null; image?: string | null; onboardingComplete?: boolean } } | null
   xp: number
+  learningLanguage: string | null
 }
 
 const links = [
@@ -16,7 +18,7 @@ const links = [
   { href: "/profile", label: "Perfil", icon: "👤" },
 ]
 
-export function NavbarClient({ session, xp }: NavbarClientProps) {
+export function NavbarClient({ session, xp, learningLanguage }: NavbarClientProps) {
   const pathname = usePathname()
 
   if (!session) {
@@ -68,13 +70,19 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
                   }`}
                 >
                   {label}
-                  {/* Active indicator underline */}
                   {active && (
                     <span className="absolute -bottom-0.5 left-2 right-2 h-0.5 bg-primary rounded-full animate-fade-in" />
                   )}
                 </Link>
               )
             })}
+
+            {/* Language badge */}
+            {learningLanguage && (
+              <span className="text-xs text-text-muted ml-2 px-2 py-1 rounded-md bg-border/30" title={`Aprendiendo ${getLangName(learningLanguage)}`}>
+                {getLangName(learningLanguage)}
+              </span>
+            )}
 
             {/* XP Counter */}
             <span className="flex items-center gap-1 text-accent font-semibold text-sm ml-3" title={`${xp} XP`}>
@@ -109,7 +117,6 @@ export function NavbarClient({ session, xp }: NavbarClientProps) {
                     : "text-text-muted hover:text-text"
                 }`}
               >
-                {/* Active top bar indicator */}
                 {active && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-full animate-scale-in" />
                 )}

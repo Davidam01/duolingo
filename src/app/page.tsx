@@ -2,19 +2,7 @@ import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
-
-const languages = [
-  { code: "en", flag: "🇬🇧", name: "Inglés" },
-  { code: "fr", flag: "🇫🇷", name: "Francés" },
-  { code: "de", flag: "🇩🇪", name: "Alemán" },
-  { code: "it", flag: "🇮🇹", name: "Italiano" },
-  { code: "pt", flag: "🇵🇹", name: "Portugués" },
-  { code: "ja", flag: "🇯🇵", name: "Japonés" },
-  { code: "ko", flag: "🇰🇷", name: "Coreano" },
-  { code: "zh", flag: "🇨🇳", name: "Chino" },
-  { code: "ru", flag: "🇷🇺", name: "Ruso" },
-  { code: "ar", flag: "🇸🇦", name: "Árabe" },
-]
+import { languages, getLangName } from "@/lib/languages"
 
 export default async function HomePage() {
   const session = await auth()
@@ -186,18 +174,4 @@ export default async function HomePage() {
   )
 }
 
-function getLangName(code: string): string {
-  const names: Record<string, string> = {
-    en: "Inglés",
-    fr: "Francés",
-    de: "Alemán",
-    it: "Italiano",
-    pt: "Portugués",
-    ja: "Japonés",
-    ko: "Coreano",
-    zh: "Chino",
-    ru: "Ruso",
-    ar: "Árabe",
-  }
-  return names[code] ?? code
-}
+

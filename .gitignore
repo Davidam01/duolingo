@@ -24,11 +24,15 @@
 .DS_Store
 *.pem
 
-# test database
+# databases
 test.db
 test.db-journal
 test.db-wal
 test.db-shm
+dev.db
+dev.db-journal
+dev.db-wal
+dev.db-shm
 
 # debug
 npm-debug.log*

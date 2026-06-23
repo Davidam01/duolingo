@@ -2,19 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-
-const languages = [
-  { code: "en", name: "Inglés", flag: "🇬🇧" },
-  { code: "fr", name: "Francés", flag: "🇫🇷" },
-  { code: "de", name: "Alemán", flag: "🇩🇪" },
-  { code: "it", name: "Italiano", flag: "🇮🇹" },
-  { code: "pt", name: "Portugués", flag: "🇵🇹" },
-  { code: "ja", name: "Japonés", flag: "🇯🇵" },
-  { code: "ko", name: "Coreano", flag: "🇰🇷" },
-  { code: "zh", name: "Chino", flag: "🇨🇳" },
-  { code: "ru", name: "Ruso", flag: "🇷🇺" },
-  { code: "ar", name: "Árabe", flag: "🇸🇦" },
-]
+import { languages } from "@/lib/languages"
 
 export function LanguageChanger({ currentLanguage }: { currentLanguage: string }) {
   const router = useRouter()
