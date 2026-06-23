@@ -1,6 +1,6 @@
 export default function LessonsLoading() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-12">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-surface">
       <div className="space-y-4 w-full max-w-lg">
         <div className="h-4 w-full bg-border rounded animate-pulse" />
         <div className="h-8 w-64 bg-border rounded animate-pulse mx-auto" />
