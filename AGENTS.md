@@ -102,6 +102,8 @@ prisma/
 - **Ruta de aprendizaje**: scroll vertical con nodos conectados por línea. Nodo activo pulsa, completado es dorado, bloqueado es gris
 - **Navbar**: top bar en desktop, bottom tabs en móvil (🏠 Inicio / 🦉 Aprender / 🏆 Clasificación / 👤 Perfil / 🚪 Salir)
 - **ExerciseCard**: feedback inmediato ✅/❌ + respuesta correcta. Acierto → auto-avance 600ms. Error → botón "siguiente" manual.
+- **ExerciseCard — tipos**: `MULTIPLE_CHOICE` (opciones vertical), `TRANSLATION` (cursiva + label), `FILL_BLANK` (grid 2 col), `LISTENING` (botón play + TTS), `ORDERING` (chips de palabras arrastrables), `FREE_FORM` (input de texto + Enter).
+- **Comparación**: Normalizada con `toLowerCase().trim()` en `lesson-flow.tsx` para ORDERING y FREE_FORM.
 - **Logros**: galería en grid 2-columnas, desbloqueados a color, bloqueados en gris con candado
 
 ### Animaciones
@@ -112,6 +114,7 @@ prisma/
 | `bounce-in` | 0.5s | Íconos de celebración (solo landing) |
 | `streak-fire` | 2s | Pulso de racha (infinite, solo dashboard) |
 | `slide-up` | 0.3s | Feedback de acierto/error en ExerciseCard |
+| `bounce-in` | 0.5s | ✅/❌ iconos en opciones |
 
 ## Tests
 
@@ -182,7 +185,7 @@ El workflow de GitHub Actions (`ci.yml`) ejecuta en orden:
 - **Importaciones**: Usar el alias `@/` para `src/`
 - **Proxy**: Usar `proxy.ts` (NO middleware.ts) — cambio en Next.js 16
 - **Sesión extendida**: `session.user.id` y `session.user.onboardingComplete` disponibles tras tipado en `src/types/next-auth.d.ts`
-- **ExerciseCard**: unifica MultipleChoice, FillBlank y Translation. Usar `key={exercise.id}` para evitar estado atascado
+- **ExerciseCard**: unifica MultipleChoice, FillBlank, Translation, Listening, Ordering y FreeForm. Usar `key={exercise.id}` para evitar estado atascado
 - **Driver adapter**: `@prisma/adapter-better-sqlite3` para SQLite en Prisma 7
 - **Router**: NO usar `router.refresh()` después de `router.push()` — causa race condition en RSC (Next.js 16)
 - **Proxy publicPaths**: incluir siempre `/api/ruta` además de `/ruta` para APIs que necesiten bypass
